@@ -1,0 +1,20 @@
+{
+  "name": "Onesim - Developpeur Full-Stack",
+  "short_name": "Onesim",
+  "description": "Portfolio de Onesim, developpeur Full-Stack specialise en applications web modernes.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f2ea",
+  "theme_color": "#3b82f6",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "lang": "fr-FR",
+  "orientation": "any",
+  "categories": ["portfolio", "technology", "web development"]
+}
