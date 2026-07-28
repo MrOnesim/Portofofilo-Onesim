@@ -2050,7 +2050,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
             className="bg-[#ff3e00] hover:bg-[#e03600] active:scale-95 transition-all text-white text-xs font-black uppercase px-4 py-2.5 rounded-xl flex items-center gap-1.5 shrink-0"
           >
             <Play className="w-3.5 h-3.5 fill-current" />
-            VOIR LE PROJET (ENTER)
+            VOIR LE PROJET
           </button>
         </div>
       )}
