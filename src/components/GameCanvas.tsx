@@ -218,6 +218,41 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
   const [visitedBillboards, setVisitedBillboards] = useState<string[]>([]);
   const [collectedPickupIds, setCollectedPickupIds] = useState<string[]>([]);
 
+  // GPS navigation target
+  const gpsTarget = (() => {
+    const projPositions = [
+      { x: 1670, y: 560 },
+      { x: 2030, y: 560 },
+      { x: 1670, y: 840 },
+      { x: 2030, y: 840 },
+      { x: 1510, y: 700 }
+    ];
+    const pAngle = (i: number) => (i / PROJECTS_DATA.length) * Math.PI * 2;
+    const pickupPositions = projPositions.map((p, i) => ({
+      x: p.x + Math.cos(pAngle(i)) * 90,
+      y: p.y + Math.sin(pAngle(i)) * 90
+    }));
+    let nearest: { x: number; y: number; label: string; type: string } | null = null;
+    let nearestDist = Infinity;
+    for (let i = 0; i < PROJECTS_DATA.length; i++) {
+      if (!collectedPickupIds.includes(PROJECTS_DATA[i].id)) {
+        const pp = pickupPositions[i];
+        const d = Math.hypot(carCoords.x - pp.x, carCoords.y - pp.y);
+        if (d < nearestDist) { nearestDist = d; nearest = { ...pp, label: PROJECTS_DATA[i].title, type: "pickup" }; }
+      }
+    }
+    if (!nearest) {
+      for (let i = 0; i < PROJECTS_DATA.length; i++) {
+        if (!visitedBillboards.includes(PROJECTS_DATA[i].id)) {
+          const bp = projPositions[i];
+          const d = Math.hypot(carCoords.x - bp.x, carCoords.y - bp.y);
+          if (d < nearestDist) { nearestDist = d; nearest = { ...bp, label: PROJECTS_DATA[i].title, type: "billboard" }; }
+        }
+      }
+    }
+    return nearest;
+  })();
+
   // References for active input keys
   const keysRef = useRef<{ [key: string]: boolean }>({});
   
@@ -1787,6 +1822,29 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
             <div className="absolute w-[60px] h-[60px] rounded-full border border-white/5 pointer-events-none" />
             <div className="absolute w-px h-full bg-white/5 pointer-events-none" />
             <div className="absolute w-full h-px bg-white/5 pointer-events-none" />
+
+            {/* GPS Navigation Line */}
+            {gpsTarget && (
+              <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <line
+                  x1={(carCoords.x / 2500) * 100}
+                  y1={(carCoords.y / 2500) * 100}
+                  x2={(gpsTarget.x / 2500) * 100}
+                  y2={(gpsTarget.y / 2500) * 100}
+                  stroke="#3b82f6"
+                  strokeWidth="0.6"
+                  strokeDasharray="1.5 1.5"
+                  opacity="0.5"
+                />
+                <circle
+                  cx={(gpsTarget.x / 2500) * 100}
+                  cy={(gpsTarget.y / 2500) * 100}
+                  r="2"
+                  fill="#3b82f6"
+                  opacity="0.8"
+                />
+              </svg>
+            )}
 
             {/* Projected coordinates dot mapping */}
             <div className="absolute inset-0 flex items-center justify-center">
