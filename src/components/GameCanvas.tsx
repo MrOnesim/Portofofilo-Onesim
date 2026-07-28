@@ -15,7 +15,8 @@ import {
   Play, 
   Zap,
   CheckCircle,
-  Compass
+  Compass,
+  X
 } from "lucide-react";
 import sound from "../utils/SoundSystem";
 
@@ -1918,7 +1919,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
         <h3 className="text-xs font-bold uppercase tracking-wider text-gray-300 flex items-center gap-1.5 mb-3 border-b border-white/10 pb-1.5">
           <Zap className="w-4 h-4 text-[#ff3e00] animate-bounce" />
           Quest Tracker
-          <button onClick={() => setShowQuestTracker(false)} className="ml-auto text-[11px] sm:text-[9px] text-gray-400 hover:text-white font-mono bg-white/5 sm:bg-transparent px-2 sm:px-0 py-1 sm:py-0 rounded-lg">[Hide]</button>
+          <button onClick={() => setShowQuestTracker(false)} className="ml-auto text-gray-400 hover:text-white transition-colors p-1 sm:p-0.5"><X className="w-5 h-5 sm:w-3.5 sm:h-3.5" /></button>
         </h3>
         
         <div className="space-y-3">
@@ -1958,7 +1959,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
             <span className="text-[10px] text-[#8c7460] font-black uppercase tracking-wider font-mono">
               🚗 Garage
             </span>
-            <button onClick={() => setShowCarCustomizer(false)} className="text-[9px] text-[#8c7460] hover:text-[#2c2621] font-mono">[Hide]</button>
+            <button onClick={() => setShowCarCustomizer(false)} className="text-[#8c7460] hover:text-[#2c2621] transition-colors"><X className="w-5 h-5 sm:w-3.5 sm:h-3.5" /></button>
           </div>
 
           {/* VEHICLE MODEL PRESENTS */}
