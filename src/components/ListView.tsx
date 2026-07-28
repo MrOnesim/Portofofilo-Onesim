@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import React, { useState, useMemo, useRef } from "react";
+import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import { 
   PROJECTS_DATA, 
   EXPERIENCE_DATA, 
@@ -120,8 +120,15 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
   const categoryBg = isDark ? "bg-gray-800" : "bg-[#ebdccb]/40";
   const statBg = isDark ? "bg-gray-900" : "bg-[#fffcf7]";
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ container: scrollRef });
+  const bgY = useTransform(scrollYProgress, [0, 1], [0, -60]);
+
   return (
-    <div className={`min-h-screen ${bg} font-sans selection:bg-[#3b82f6] selection:text-white transition-colors duration-300`}>
+    <div ref={scrollRef} className={`min-h-screen ${bg} font-sans selection:bg-[#3b82f6] selection:text-white transition-colors duration-300 relative overflow-x-hidden`}>
+      {/* Parallax background decoration */}
+      <motion.div className="fixed top-0 right-0 w-96 h-96 rounded-full pointer-events-none opacity-[0.03] dark:opacity-[0.06]" style={{ y: bgY, background: "radial-gradient(circle, #3b82f6 0%, transparent 70%)" }} />
+      <motion.div className="fixed bottom-0 left-0 w-80 h-80 rounded-full pointer-events-none opacity-[0.02] dark:opacity-[0.04]" style={{ y: useTransform(scrollYProgress, [0, 1], [0, 40]), background: "radial-gradient(circle, #10b981 0%, transparent 70%)" }} />
       {/* HEADER */}
       <header className={`max-w-6xl mx-auto px-4 pt-12 pb-8 border-b ${border}`}>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
@@ -246,7 +253,7 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
                 </div>
               </div>
 
-              <div className="relative mb-8">
+              <div className="relative mb-4">
                 <Search className={`absolute left-4 top-3.5 w-5 h-5 ${textMuted}`} />
                 <input
                   type="text"
@@ -258,6 +265,14 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
                 {searchTerm && (
                   <button onClick={() => setSearchTerm("")} className="absolute right-4 top-4 text-xs font-semibold text-[#3b82f6] hover:underline">Effacer</button>
                 )}
+              </div>
+              <div className="flex flex-wrap gap-1.5 mb-6">
+                {[...new Set(PROJECTS_DATA.flatMap(p => p.technologies))].sort().slice(0, 15).map(tech => (
+                  <button key={tech} onClick={() => { sound.playClick(); setSearchTerm(tech); }}
+                    className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all ${searchTerm === tech ? "bg-[#3b82f6] text-white shadow-sm" : `${isDark ? "bg-gray-800 text-gray-400 hover:bg-gray-700" : "bg-[#ebdccb]/30 text-[#6b584a] hover:bg-[#ebdccb]/60"}`}`}>
+                    {tech}
+                  </button>
+                ))}
               </div>
 
               {filteredProjects.length > 0 ? (

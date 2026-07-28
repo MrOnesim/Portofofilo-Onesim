@@ -201,10 +201,21 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
     goldRush: { name: "Collectionneur (5 pieces)", done: false, desc: "Collecte les anneaux brillants" },
     jengaStrike: { name: "Demolition de competences", done: false, desc: "Percute la pile de briques tech" },
     strikePins: { name: "Champion de Quilles (5 tombees)", done: false, desc: "Heurte les quilles en bas a gauche" },
-    skyHigh: { name: "Saut Propulse!", done: false, desc: "Saute depuis la rampe en bois" }
+    skyHigh: { name: "Saut Propulse!", done: false, desc: "Saute depuis la rampe en bois" },
+    pickupHunter: { name: "Chasseur de Projets", done: false, desc: "Collecte les 5 cubes de projets" },
+    tourist: { name: "Touriste Virtuel", done: false, desc: "Visite les 5 panneaux de projets" }
   });
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Combo system
+  const [combo, setCombo] = useState(0);
+  const comboTimeoutRef = useRef<number | null>(null);
+  const [comboToast, setComboToast] = useState<string | null>(null);
+
+  // Track visited billboards and collected pickups for quests
+  const [visitedBillboards, setVisitedBillboards] = useState<string[]>([]);
+  const [collectedPickupIds, setCollectedPickupIds] = useState<string[]>([]);
 
   // References for active input keys
   const keysRef = useRef<{ [key: string]: boolean }>({});
@@ -596,9 +607,15 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
           goldRush: { name: "Collectionneur (5 pieces)", done: false, desc: "Collecte les anneaux brillants" },
           jengaStrike: { name: "Demolition de competences", done: false, desc: "Percute la pile de briques tech" },
           strikePins: { name: "Champion de Quilles (5 tombees)", done: false, desc: "Heurte les quilles en bas a gauche" },
-          skyHigh: { name: "Saut Propulse!", done: false, desc: "Saute depuis la rampe en bois" }
+          skyHigh: { name: "Saut Propulse!", done: false, desc: "Saute depuis la rampe en bois" },
+          pickupHunter: { name: "Chasseur de Projets", done: false, desc: "Collecte les 5 cubes de projets" },
+          tourist: { name: "Touriste Virtuel", done: false, desc: "Visite les 5 panneaux de projets" }
         });
         setCoinsCollected(0);
+        setCollectedPickupIds([]);
+        setVisitedBillboards([]);
+        setCombo(0);
+        if (comboTimeoutRef.current) clearTimeout(comboTimeoutRef.current);
         triggerToast("Scene, scores et quetes reinitialises avec succes!");
       }
 
@@ -975,6 +992,30 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
                         alpha: 1, life: 40, maxLife: 40,
                       });
                     }
+                    // Combo system
+                    const newCombo = combo + 1;
+                    setCombo(newCombo);
+                    if (comboTimeoutRef.current) clearTimeout(comboTimeoutRef.current);
+                    comboTimeoutRef.current = window.setTimeout(() => setCombo(0), 3000);
+                    if (newCombo >= 3) {
+                      setComboToast(`🔥 COMBO x${newCombo}!`);
+                      setTimeout(() => setComboToast(null), 1500);
+                    }
+                    // Track collected pickups for quest
+                    if (b.projectRef && !collectedPickupIds.includes(b.projectRef.id)) {
+                      const newIds = [...collectedPickupIds, b.projectRef.id];
+                      setCollectedPickupIds(newIds);
+                      if (newIds.length >= 5) {
+                        setQuests((q) => {
+                          if (!q.pickupHunter.done) {
+                            sound.playAchievement();
+                            triggerToast("🏆 SUCCES: Chasseur de Projets (5 cubes)!");
+                            return { ...q, pickupHunter: { ...q.pickupHunter, done: true } };
+                          }
+                          return q;
+                        });
+                      }
+                    }
                     setTimeout(() => {
                       if (b.projectRef) onOpenProject(b.projectRef);
                     }, 400);
@@ -1094,6 +1135,20 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
       if (activeBillboardRef.current?.id !== currentActiveBillboard?.id) {
         activeBillboardRef.current = currentActiveBillboard;
         setActiveBillboard(currentActiveBillboard);
+        if (currentActiveBillboard?.projectRef && !visitedBillboards.includes(currentActiveBillboard.projectRef.id)) {
+          const newVisited = [...visitedBillboards, currentActiveBillboard.projectRef.id];
+          setVisitedBillboards(newVisited);
+          if (newVisited.length >= 5) {
+            setQuests((q) => {
+              if (!q.tourist.done) {
+                sound.playAchievement();
+                triggerToast("🏆 SUCCES: Touriste Virtuel (5 panneaux)!");
+                return { ...q, tourist: { ...q.tourist, done: true } };
+              }
+              return q;
+            });
+          }
+        }
       }
 
       // Speed check for achievements
@@ -1643,6 +1698,13 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
         </div>
       )}
 
+      {/* COMBO TOAST */}
+      {comboToast && (
+        <div className="absolute top-36 left-1/2 -translate-x-1/2 bg-rose-900/90 border border-rose-500/40 text-white px-5 py-2 rounded-full shadow-2xl z-50 animate-bounce">
+          <span className="text-sm font-black font-mono text-rose-300">{comboToast}</span>
+        </div>
+      )}
+
       {/* TOP HEADER CONTROLS BAR */}
       <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none z-30">
         {/* Title branding */}
@@ -1727,18 +1789,17 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
 
             {/* Projected coordinates dot mapping */}
             <div className="absolute inset-0 flex items-center justify-center">
-              {/* Projects billboard dot */}
-              <div 
-                className="absolute w-2 h-2 rounded-full bg-fuchsia-500 animate-pulse shadow-sm shadow-fuchsia-500"
-                style={{ top: "35%", left: "75%" }}
-                title="Projects zone"
-              />
-              {/* Project pickups dot */}
-              <div 
-                className="absolute w-1.5 h-1.5 rounded-full bg-blue-400 animate-ping shadow-sm shadow-blue-400"
-                style={{ top: "32%", left: "72%" }}
-                title="Project pickups"
-              />
+              {/* Individual project billboards */}
+              {PROJECTS_DATA.map((p, i) => {
+                const positions = [{ top: "35%", left: "75%" }, { top: "30%", left: "60%" }, { top: "40%", left: "65%" }, { top: "28%", left: "70%" }, { top: "38%", left: "55%" }];
+                const pos = positions[i] || positions[0];
+                return (
+                  <div key={p.id} className="absolute flex flex-col items-center" style={{ top: pos.top, left: pos.left }}>
+                    <div className="w-2 h-2 rounded-full animate-pulse shadow-sm" style={{ backgroundColor: p.color, boxShadow: `0 0 6px ${p.color}` }} title={p.title} />
+                    <span className="text-[5px] text-white/60 font-mono mt-0.5 leading-none">{p.title.substring(0, 4)}</span>
+                  </div>
+                );
+              })}
               {/* Bowling Pins dot */}
               <div 
                 className="absolute w-2 h-2 rounded-full bg-red-500 shadow-sm shadow-red-500"
@@ -2019,10 +2080,26 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
             </span>
           </div>
 
+          {combo > 0 && (
+            <div className="flex justify-between items-center gap-4 border-b border-[#ebdccb]/60 pb-1.5 mb-1.5">
+              <span className="text-[10px] text-[#8c7460] font-bold uppercase font-sans">Combo</span>
+              <span className="text-sm font-black text-rose-500 animate-pulse">
+                x{combo}
+              </span>
+            </div>
+          )}
+
           <div className="flex justify-between items-center gap-4 border-b border-[#ebdccb]/60 pb-1.5 mb-1.5">
             <span className="text-[10px] text-[#8c7460] font-bold uppercase font-sans">Coins</span>
             <span className="text-sm font-black text-amber-600">
-              {coinsCollected} Collected
+              {coinsCollected} / 5
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center gap-4 border-b border-[#ebdccb]/60 pb-1.5 mb-1.5">
+            <span className="text-[10px] text-[#8c7460] font-bold uppercase font-sans">Pickups</span>
+            <span className="text-sm font-black text-cyan-400">
+              {collectedPickupIds.length} / 5
             </span>
           </div>
 
