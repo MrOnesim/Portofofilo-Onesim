@@ -269,7 +269,7 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
                       onClick={() => handleProjectClick(project)}
                       className={`group ${card} rounded-2xl border ${border} ${cardHover} overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col h-full`}
                     >
-                      <div className="relative h-48 overflow-hidden">
+                      <div className="relative aspect-video md:aspect-auto md:h-48 overflow-hidden">
                         <img src={project.images[0]} alt={project.title} className="w-full h-full object-cover" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                         <div className="absolute bottom-4 left-4 right-4">

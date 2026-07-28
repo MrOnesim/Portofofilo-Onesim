@@ -1788,7 +1788,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
 
       {/* CONTROLS GUIDE PANEL OVERLAY */}
       {showControlsHint && (
-        <div className="absolute top-20 left-4 max-w-sm bg-[#fffcf7]/95 border-2 border-[#2c2621] p-5 rounded-3xl shadow-xl z-20">
+        <div className="absolute top-20 left-4 right-4 sm:right-auto max-w-sm bg-[#fffcf7]/95 border-2 border-[#2c2621] p-5 rounded-3xl shadow-xl z-20">
           <div className="flex justify-between items-center mb-3">
             <h2 className="text-xs font-bold uppercase tracking-wider text-[#8c7460] flex items-center gap-1.5">
               <Zap className="w-4 h-4 text-[#ff3e00] animate-pulse" />
@@ -1850,7 +1850,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
       )}
 
       {/* REAL-TIME SANDBOX QUESTS TRACKER (Middle-Left Panel) */}
-      <div className="absolute top-[420px] left-4 max-w-sm bg-slate-950/85 backdrop-blur-md border border-white/10 p-4 rounded-3xl shadow-xl z-20 pointer-events-auto text-white">
+      <div className="absolute lg:top-[420px] top-72 left-4 right-4 lg:right-auto max-w-sm bg-slate-950/85 backdrop-blur-md border border-white/10 p-4 rounded-3xl shadow-xl z-20 pointer-events-auto text-white">
         <h3 className="text-xs font-bold uppercase tracking-wider text-gray-300 flex items-center gap-1.5 mb-3 border-b border-white/10 pb-1.5">
           <Zap className="w-4 h-4 text-[#ff3e00] animate-bounce" />
           Quest Tracker
@@ -1977,7 +1977,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
       </div>
 
       {/* SPEEDOMETER & HUD STATUS OVERLAYS (Bottom-Right/Center) */}
-      <div className="absolute bottom-4 right-4 pointer-events-none z-20 flex items-end gap-3">
+      <div className="absolute bottom-4 right-4 left-4 sm:left-auto pointer-events-none z-20 flex items-end gap-3">
         {/* Speedometer Gauges */}
         <div className="bg-[#fffcf7]/95 border-2 border-[#2c2621] px-5 py-4 rounded-3xl shadow-lg pointer-events-auto text-right font-mono min-w-[170px] relative overflow-hidden">
           
@@ -2022,7 +2022,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
       </div>
 
       {/* PICKUP HINT — floating tag */}
-      <div className="absolute bottom-24 left-4 pointer-events-none z-20 opacity-70 hover:opacity-100 transition-opacity">
+      <div className="absolute bottom-20 sm:bottom-24 left-4 pointer-events-none z-20 opacity-70 hover:opacity-100 transition-opacity">
         <div className="bg-slate-900/80 backdrop-blur-sm border border-white/10 text-white/80 text-[10px] font-mono font-bold px-3 py-2 rounded-xl flex items-center gap-1.5 shadow-lg animate-pulse">
           <span className="w-2 h-2 rounded-sm bg-cyan-400 animate-spin" />
           Collecte les cubes lumineux ★

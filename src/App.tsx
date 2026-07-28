@@ -155,7 +155,7 @@ export default function App() {
               ))}
             </div>
 
-            <div className="relative max-w-2xl w-full bg-[#fffcf7] border-4 border-[#2c2621] rounded-3xl p-8 md:p-12 shadow-2xl z-10 text-center flex flex-col items-center">
+            <div className="relative max-w-2xl w-full bg-[#fffcf7] border-4 border-[#2c2621] rounded-3xl p-6 sm:p-8 md:p-12 shadow-2xl z-10 text-center flex flex-col items-center">
               <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.1, duration: 0.5 }} className="flex items-center gap-2 mb-4">
                 <span className="w-3 h-3 rounded-full bg-[#3b82f6] animate-ping" />
                 <span className="px-3 py-1 bg-[#3b82f6]/10 text-[#3b82f6] text-xs font-black uppercase tracking-widest rounded-full border border-[#3b82f6]/20 flex items-center gap-1">
