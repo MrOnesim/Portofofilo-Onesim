@@ -1918,7 +1918,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
         <h3 className="text-xs font-bold uppercase tracking-wider text-gray-300 flex items-center gap-1.5 mb-3 border-b border-white/10 pb-1.5">
           <Zap className="w-4 h-4 text-[#ff3e00] animate-bounce" />
           Quest Tracker
-          <button onClick={() => setShowQuestTracker(false)} className="ml-auto text-[9px] text-gray-400 hover:text-white font-mono">[Hide]</button>
+          <button onClick={() => setShowQuestTracker(false)} className="ml-auto text-[11px] sm:text-[9px] text-gray-400 hover:text-white font-mono bg-white/5 sm:bg-transparent px-2 sm:px-0 py-1 sm:py-0 rounded-lg">[Hide]</button>
         </h3>
         
         <div className="space-y-3">
