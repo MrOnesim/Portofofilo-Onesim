@@ -183,6 +183,8 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
 
   // Dynamic Minimap Scale
   const [showMinimap, setShowMinimap] = useState(true);
+  const [showQuestTracker, setShowQuestTracker] = useState(true);
+  const [showCarCustomizer, setShowCarCustomizer] = useState(true);
 
   // Game metrics
   const [coinsCollected, setCoinsCollected] = useState(0);
@@ -1850,10 +1852,12 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
       )}
 
       {/* REAL-TIME SANDBOX QUESTS TRACKER (Middle-Left Panel) */}
+      {showQuestTracker && (
       <div className="absolute lg:top-[420px] top-72 left-4 right-4 lg:right-auto max-w-sm bg-slate-950/85 backdrop-blur-md border border-white/10 p-4 rounded-3xl shadow-xl z-20 pointer-events-auto text-white">
         <h3 className="text-xs font-bold uppercase tracking-wider text-gray-300 flex items-center gap-1.5 mb-3 border-b border-white/10 pb-1.5">
           <Zap className="w-4 h-4 text-[#ff3e00] animate-bounce" />
           Quest Tracker
+          <button onClick={() => setShowQuestTracker(false)} className="ml-auto text-[9px] text-gray-400 hover:text-white font-mono">[Hide]</button>
         </h3>
         
         <div className="space-y-3">
@@ -1875,12 +1879,27 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
             </div>
           ))}
         </div>
-      </div>
+      </div>)}
+
+      {/* QUICK FLOATING TRIGGER FOR QUEST TRACKER */}
+      {!showQuestTracker && (
+        <button onClick={() => { sound.playClick(); setShowQuestTracker(true); }} className="absolute top-[300px] left-4 bg-[#fffcf7]/90 border border-[#ebdccb] px-3 py-1.5 rounded-xl text-[10px] font-bold text-[#2c2621] z-20 shadow-sm">
+          📋 Show Quests
+        </button>
+      )}
 
       {/* HIGH-FIDELITY GARAGE & CUSTOM CAR COLORIZER (Bottom-Left Panel) */}
+      {showCarCustomizer && (
       <div className="absolute bottom-4 left-4 pointer-events-none z-20 max-w-sm hidden sm:block">
         <div className="bg-[#fffcf7]/95 border-2 border-[#2c2621] p-4 rounded-3xl shadow-lg pointer-events-auto">
           
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] text-[#8c7460] font-black uppercase tracking-wider font-mono">
+              🚗 Garage
+            </span>
+            <button onClick={() => setShowCarCustomizer(false)} className="text-[9px] text-[#8c7460] hover:text-[#2c2621] font-mono">[Hide]</button>
+          </div>
+
           {/* VEHICLE MODEL PRESENTS */}
           <span className="text-[10px] text-[#8c7460] font-black block uppercase tracking-wider mb-2 font-mono">
             1. Select vehicle chassis
@@ -1974,7 +1993,14 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
             </div>
           )}
         </div>
-      </div>
+      </div>)}
+
+      {/* QUICK FLOATING TRIGGER FOR GARAGE */}
+      {!showCarCustomizer && (
+        <button onClick={() => { sound.playClick(); setShowCarCustomizer(true); }} className="absolute bottom-4 left-4 bg-[#fffcf7]/90 border border-[#ebdccb] px-3 py-1.5 rounded-xl text-[10px] font-bold text-[#2c2621] z-20 shadow-sm">
+          🚗 Show Garage
+        </button>
+      )}
 
       {/* SPEEDOMETER & HUD STATUS OVERLAYS (Bottom-Right/Center) */}
       <div className="absolute bottom-4 right-4 left-4 sm:left-auto pointer-events-none z-20 flex items-end gap-3">
