@@ -146,6 +146,7 @@ export const SKILLS_DATA: SkillCategory[] = [
       { name: "JavaScript", level: 80, color: "#f7df1e" },
       { name: "TypeScript", level: 75, color: "#3178c6" },
       { name: "React", level: 80, color: "#61dafb" },
+      { name: "Three.js", level: 55, color: "#049ef4" },
       { name: "Next.js", level: 70, color: "#000000" },
       { name: "Vite", level: 75, color: "#646cff" },
       { name: "Responsive Design", level: 85, color: "#10b981" }
