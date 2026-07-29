@@ -250,7 +250,7 @@ export const BLOG_POSTS: BlogPost[] = [
 ];
 
 export const SOCIAL_LINKS = {
-  linkedin: "https://linkedin.com/in/onesim",
+  facebook: "https://www.facebook.com/share/1HkPgBdAkq/?mibextid=wwXIfr",
   github: "https://github.com/MrOnesim",
   twitter: "https://x.com/_onesim",
   email: "mailto:gracaonesim@gmail.com",

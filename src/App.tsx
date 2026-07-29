@@ -71,7 +71,7 @@ export default function App() {
                 url: "https://onesim.vercel.app",
                 sameAs: [
                   "https://github.com/MrOnesim",
-                  "https://linkedin.com/in/onesim",
+                  "https://www.facebook.com/share/1HkPgBdAkq/?mibextid=wwXIfr",
                   "https://x.com/_onesim",
                 ],
                 knowsAbout: [

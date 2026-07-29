@@ -598,7 +598,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
       const socX = 1250;
       const socialConfigs = [
         { name: "GITHUB", url: SOCIAL_LINKS.github, color: "#1a1614", side: "#000", x: socX - 220 },
-        { name: "LINKEDIN", url: SOCIAL_LINKS.linkedin, color: "#0077b5", side: "#004471", x: socX - 70 },
+        { name: "FACEBOOK", url: SOCIAL_LINKS.facebook, color: "#1877f2", side: "#0d65d9", x: socX - 70 },
         { name: "TWITTER", url: SOCIAL_LINKS.twitter, color: "#191919", side: "#0d0d0d", x: socX + 80 },
         { name: "EMAIL ME", url: SOCIAL_LINKS.email, color: "#ff3e00", side: "#c02c00", x: socX + 230 }
       ];
