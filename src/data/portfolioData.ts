@@ -198,6 +198,13 @@ export const TESTIMONIALS_DATA: Testimonial[] = [
     role: "Formateur Full-Stack",
     content: "Un etudiant motive qui a su rapidement monter en competence. Ses projets temoignent de sa capacite a concevoir des solutions completes et fonctionnelles.",
     avatar: ""
+  },
+  {
+    id: "test-3",
+    name: "Ange Akonde",
+    role: "Développeur Web & Partenaire",
+    content: "Collaborer avec Onesim sur le projet ONG CDACS a ete une experience enrichissante. Sa maitrise technique et sa vision produit ont permis de livrer une solution fiable et impactante pour notre client.",
+    avatar: ""
   }
 ];
 

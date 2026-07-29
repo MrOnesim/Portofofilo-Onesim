@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { 
   PROJECTS_DATA, 
@@ -32,6 +32,8 @@ import {
   Download,
   Menu,
   X as XIcon,
+  ArrowLeft,
+  ArrowRight,
 } from "lucide-react";
 import sound from "../utils/SoundSystem";
 import { sendContactEmail } from "../utils/emailjs";
@@ -92,6 +94,74 @@ const useTypewriter = (text: string, speed: number = 55) => {
 const TypewriterText: React.FC<{ text: string }> = ({ text }) => {
   const { displayed, done } = useTypewriter(text);
   return <>{displayed}{!done && <span className="animate-pulse">|</span>}</>;
+};
+
+const TestimonialCarousel: React.FC<{ isDark: boolean; sectionBg: string; borderLight: string; textBody: string; textPrimary: string; textMuted: string }> = ({ isDark, sectionBg, borderLight, textBody, textPrimary, textMuted }) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [currentIdx, setCurrentIdx] = useState(0);
+
+  const scrollTo = (idx: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const cardW = el.clientWidth * 0.85 + 16;
+    el.scrollTo({ left: cardW * idx, behavior: "smooth" });
+    setCurrentIdx(idx);
+  };
+
+  const handleScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const cardW = el.clientWidth * 0.85 + 16;
+    const idx = Math.round(el.scrollLeft / cardW);
+    setCurrentIdx(idx);
+  };
+
+  const idxRef = useRef(currentIdx);
+  idxRef.current = currentIdx;
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const next = (idxRef.current + 1) % TESTIMONIALS_DATA.length;
+      scrollTo(next);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="relative">
+      <div ref={scrollRef} onScroll={handleScroll} className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 -mx-2 px-2" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
+        {TESTIMONIALS_DATA.map((t) => (
+          <div key={t.id} className={`snap-center shrink-0 w-[85%] ${sectionBg} p-5 rounded-xl border ${borderLight} flex flex-col justify-between`}>
+            <p className={`text-sm ${textBody} italic leading-relaxed mb-4 flex-1`}>"{t.content}"</p>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-black shrink-0" style={{ backgroundColor: "#3b82f6" }}>
+                {t.name.split(" ").map((w) => w[0]).join("").substring(0, 2).toUpperCase()}
+              </div>
+              <div>
+                <p className={`text-sm font-bold ${textPrimary}`}>{t.name}</p>
+                <p className={`text-xs ${textMuted}`}>{t.role}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="flex items-center justify-between mt-4">
+        <button onClick={() => scrollTo(Math.max(0, currentIdx - 1))}
+          className={`p-2 rounded-lg border ${borderLight} ${isDark ? "hover:bg-gray-800 text-gray-400" : "hover:bg-[#ebdccb]/50 text-[#6b584a]"} transition-all`}>
+          <ArrowLeft className="w-4 h-4" />
+        </button>
+        <div className="flex gap-2">
+          {TESTIMONIALS_DATA.map((_, i) => (
+            <button key={i} onClick={() => scrollTo(i)}
+              className={`w-2 h-2 rounded-full transition-all ${i === currentIdx ? "bg-[#3b82f6] w-4" : `${isDark ? "bg-gray-700" : "bg-[#ebdccb]"}`}`} />
+          ))}
+        </div>
+        <button onClick={() => scrollTo(Math.min(TESTIMONIALS_DATA.length - 1, currentIdx + 1))}
+          className={`p-2 rounded-lg border ${borderLight} ${isDark ? "hover:bg-gray-800 text-gray-400" : "hover:bg-[#ebdccb]/50 text-[#6b584a]"} transition-all`}>
+          <ArrowRight className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  );
 };
 
 interface ListViewProps {
@@ -252,28 +322,12 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
       </motion.div>
 
       {/* Testimonials */}
-      <motion.div variants={fadeUp} className={`${card} p-8 rounded-2xl border ${border}`}>
+      <motion.div variants={fadeUp} className={`${card} p-8 rounded-2xl border ${border} overflow-hidden`}>
         <h2 className={`text-2xl font-serif font-black ${textPrimary} mb-6 flex items-center gap-2`}>
           <Star className="w-6 h-6 text-[#3b82f6]" />
           Témoignages
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {TESTIMONIALS_DATA.map((t) => (
-            <motion.div key={t.id} whileHover={{ scale: 1.01 }} className={`${sectionBg} p-5 rounded-xl border ${borderLight}`}>
-              <p className={`text-sm ${textBody} italic leading-relaxed mb-4`}>"{t.content}"</p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-black shrink-0" style={{ backgroundColor: "#3b82f6" }}>
-                  {t.name.split(" ").map((w) => w[0]).join("").substring(0, 2).toUpperCase()}
-                </div>
-                <div>
-                  <p className={`text-sm font-bold ${textPrimary}`}>{t.name}</p>
-                  <p className={`text-xs ${textMuted}`}>{t.role}</p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
+        <TestimonialCarousel isDark={isDark} sectionBg={sectionBg} borderLight={borderLight} textBody={textBody} textPrimary={textPrimary} textMuted={textMuted} /></motion.div>
     </div>
   );
 
