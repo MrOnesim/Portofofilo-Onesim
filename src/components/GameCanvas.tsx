@@ -191,9 +191,21 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
   );
   const [showCarCustomizer, setShowCarCustomizer] = useState(true);
 
-  // Game metrics
-  const [coinsCollected, setCoinsCollected] = useState(0);
-  const [bowlingScore, setBowlingScore] = useState(0);
+  // Game metrics - Initialized from localStorage if available
+  const [coinsCollected, setCoinsCollected] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("onesim_game_coins");
+      return saved ? parseInt(saved, 10) : 0;
+    }
+    return 0;
+  });
+  const [bowlingScore, setBowlingScore] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("onesim_game_bowling");
+      return saved ? parseInt(saved, 10) : 0;
+    }
+    return 0;
+  });
   const [speedKmh, setSpeedKmh] = useState(0);
   // On mobile, collapse overlays by default so they don't block the canvas
   const [showControlsHint, setShowControlsHint] = useState(
@@ -203,15 +215,22 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
   // Real-time coordinates for live minimap reporting
   const [carCoords, setCarCoords] = useState({ x: 1250, y: 1400 });
 
-  // Quest / Achievements System
-  const [quests, setQuests] = useState({
-    speedDemon: { name: "Vitesse Extreme (>100 km/h Turbo)", done: false, desc: "Utilise SHIFT pour le boost" },
-    goldRush: { name: "Collectionneur (5 pieces)", done: false, desc: "Collecte les anneaux brillants" },
-    jengaStrike: { name: "Demolition de competences", done: false, desc: "Percute la pile de briques tech" },
-    strikePins: { name: "Champion de Quilles (5 tombees)", done: false, desc: "Heurte les quilles en bas a gauche" },
-    skyHigh: { name: "Saut Propulse!", done: false, desc: "Saute depuis la rampe en bois" },
-    pickupHunter: { name: "Chasseur de Projets", done: false, desc: "Collecte les 5 cubes de projets" },
-    tourist: { name: "Touriste Virtuel", done: false, desc: "Visite les 5 panneaux de projets" }
+  // Quest / Achievements System - Initialized from localStorage if available
+  const [quests, setQuests] = useState(() => {
+    const defaultQuests = {
+      speedDemon: { name: "Vitesse Extreme (>100 km/h Turbo)", done: false, desc: "Utilise SHIFT pour le boost" },
+      goldRush: { name: "Collectionneur (5 pieces)", done: false, desc: "Collecte les anneaux brillants" },
+      jengaStrike: { name: "Demolition de competences", done: false, desc: "Percute la pile de briques tech" },
+      strikePins: { name: "Champion de Quilles (5 tombees)", done: false, desc: "Heurte les quilles en bas a gauche" },
+      skyHigh: { name: "Saut Propulse!", done: false, desc: "Saute depuis la rampe en bois" },
+      pickupHunter: { name: "Chasseur de Projets", done: false, desc: "Collecte les 5 cubes de projets" },
+      tourist: { name: "Touriste Virtuel", done: false, desc: "Visite les 5 panneaux de projets" }
+    };
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("onesim_game_quests");
+      return saved ? JSON.parse(saved) : defaultQuests;
+    }
+    return defaultQuests;
   });
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -222,8 +241,41 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
   const [comboToast, setComboToast] = useState<string | null>(null);
 
   // Track visited billboards and collected pickups for quests
-  const [visitedBillboards, setVisitedBillboards] = useState<string[]>([]);
-  const [collectedPickupIds, setCollectedPickupIds] = useState<string[]>([]);
+  const [visitedBillboards, setVisitedBillboards] = useState<string[]>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("onesim_game_billboards");
+      return saved ? JSON.parse(saved) : [];
+    }
+    return [];
+  });
+  const [collectedPickupIds, setCollectedPickupIds] = useState<string[]>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("onesim_game_pickups");
+      return saved ? JSON.parse(saved) : [];
+    }
+    return [];
+  });
+
+  // Save game progress automatically to localStorage
+  useEffect(() => {
+    localStorage.setItem("onesim_game_coins", coinsCollected.toString());
+  }, [coinsCollected]);
+
+  useEffect(() => {
+    localStorage.setItem("onesim_game_bowling", bowlingScore.toString());
+  }, [bowlingScore]);
+
+  useEffect(() => {
+    localStorage.setItem("onesim_game_pickups", JSON.stringify(collectedPickupIds));
+  }, [collectedPickupIds]);
+
+  useEffect(() => {
+    localStorage.setItem("onesim_game_billboards", JSON.stringify(visitedBillboards));
+  }, [visitedBillboards]);
+
+  useEffect(() => {
+    localStorage.setItem("onesim_game_quests", JSON.stringify(quests));
+  }, [quests]);
 
   // GPS navigation target
   const gpsTarget = (() => {
@@ -659,6 +711,14 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
         setVisitedBillboards([]);
         setCombo(0);
         if (comboTimeoutRef.current) clearTimeout(comboTimeoutRef.current);
+
+        // Clear game progress in localStorage
+        localStorage.removeItem("onesim_game_coins");
+        localStorage.removeItem("onesim_game_bowling");
+        localStorage.removeItem("onesim_game_pickups");
+        localStorage.removeItem("onesim_game_billboards");
+        localStorage.removeItem("onesim_game_quests");
+
         triggerToast("Scene, scores et quetes reinitialises avec succes!");
       }
 
@@ -1778,6 +1838,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
               setIsNightMode(!isNightMode);
             }}
             title={isNightMode ? "Switch to Day Mode" : "Switch to Night Mode"}
+            aria-label={isNightMode ? "Activer le mode jour" : "Activer le mode nuit"}
             className="bg-[#fffcf7]/90 backdrop-blur-md border border-[#ebdccb] hover:bg-[#ebdccb]/30 p-2.5 rounded-xl shadow-sm transition-all text-[#2c2621] active:scale-95"
           >
             {isNightMode ? <Sun className="w-4 h-4 text-amber-500 animate-spin-slow" /> : <Moon className="w-4 h-4" />}
@@ -1787,6 +1848,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
           <button
             onClick={toggleMute}
             title={isMuted ? "Unmute Sound" : "Mute Sound"}
+            aria-label={isMuted ? "Activer le son" : "Désactiver le son"}
             className="bg-[#fffcf7]/90 backdrop-blur-md border border-[#ebdccb] hover:bg-[#ebdccb]/30 p-2.5 rounded-xl shadow-sm transition-all text-[#2c2621] active:scale-95"
           >
             {isMuted ? <VolumeX className="w-4 h-4 text-[#ff3e00]" /> : <Volume2 className="w-4 h-4 text-emerald-600" />}
@@ -1799,6 +1861,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
               setShowControlsHint(!showControlsHint);
             }}
             title="Toggle Controls Guide"
+            aria-label="Afficher ou masquer le guide des contrôles"
             className="bg-[#fffcf7]/90 backdrop-blur-md border border-[#ebdccb] hover:bg-[#ebdccb]/30 p-2.5 rounded-xl shadow-sm transition-all text-[#2c2621] active:scale-95"
           >
             <Info className="w-4 h-4" />
@@ -2184,6 +2247,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
             window.dispatchEvent(rEvent);
           }}
           title="Reset Car Position & Quests (R)"
+          aria-label="Réinitialiser la position de la voiture et les quêtes"
           className="bg-[#ff3e00] hover:bg-[#e03600] active:scale-95 transition-all text-white p-4 rounded-2xl shadow-lg shadow-[#ff3e00]/15 pointer-events-auto flex items-center justify-center"
         >
           <RefreshCw className="w-5 h-5 animate-spin-slow" />
@@ -2300,6 +2364,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
             <button
               onTouchStart={() => handleTouchStart("turnLeft")}
               onTouchEnd={() => handleTouchEnd("turnLeft")}
+              aria-label="Tourner à gauche"
               className="w-16 h-16 bg-[#fffcf7]/95 border border-[#ebdccb] active:bg-[#ff3e00]/15 select-none rounded-2xl shadow-md flex items-center justify-center text-[#2c2621] font-black text-2xl"
             >
               ◀
@@ -2307,6 +2372,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
             <button
               onTouchStart={() => handleTouchStart("turnRight")}
               onTouchEnd={() => handleTouchEnd("turnRight")}
+              aria-label="Tourner à droite"
               className="w-16 h-16 bg-[#fffcf7]/95 border border-[#ebdccb] active:bg-[#ff3e00]/15 select-none rounded-2xl shadow-md flex items-center justify-center text-[#2c2621] font-black text-2xl"
             >
               ▶
@@ -2318,6 +2384,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
             <button
               onTouchStart={() => handleTouchStart("drift")}
               onTouchEnd={() => handleTouchEnd("drift")}
+              aria-label="Dérapage (Drift)"
               className="w-14 h-14 bg-amber-600/90 border border-amber-700 select-none text-white font-bold text-xs rounded-full shadow-md flex items-center justify-center active:scale-90"
             >
               DRIFT
@@ -2325,6 +2392,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
             <button
               onTouchStart={() => handleTouchStart("turbo")}
               onTouchEnd={() => handleTouchEnd("turbo")}
+              aria-label="Activer Turbo Nitro"
               className="w-14 h-14 bg-rose-600/95 border border-rose-700 select-none text-white font-bold text-xs rounded-full shadow-md flex flex-col items-center justify-center active:scale-90"
             >
               <span>TURBO</span>
@@ -2337,6 +2405,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
             <button
               onTouchStart={() => handleTouchStart("reverse")}
               onTouchEnd={() => handleTouchEnd("reverse")}
+              aria-label="Reculer ou freiner"
               className="w-16 h-20 bg-gray-700/90 border border-gray-800 select-none text-white font-bold text-xs rounded-xl shadow-md flex flex-col items-center justify-center"
             >
               <span>BRAKE</span>
@@ -2345,6 +2414,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
             <button
               onTouchStart={() => handleTouchStart("forward")}
               onTouchEnd={() => handleTouchEnd("forward")}
+              aria-label="Accélérer (Avancer)"
               className="w-18 h-24 bg-[#ff3e00]/95 border border-[#e03600] select-none text-white font-bold text-sm rounded-xl shadow-md flex flex-col items-center justify-center"
             >
               <span>GO</span>

@@ -25,7 +25,8 @@ export function ParticleCanvas() {
       alpha: number;
     }[] = [];
 
-    for (let i = 0; i < 80; i++) {
+    // Optimize performance: reduce particle count to 45 for smoother experience on low-end devices
+    for (let i = 0; i < 45; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
@@ -54,14 +55,16 @@ export function ParticleCanvas() {
         ctx.fill();
       });
 
-      // Draw connecting lines between nearby particles
+      // Draw connecting lines between nearby particles - optimized distance check
+      const maxDistanceSq = 150 * 150;
       particles.forEach((a, i) => {
         for (let j = i + 1; j < particles.length; j++) {
           const b = particles[j];
           const dx = a.x - b.x;
           const dy = a.y - b.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 150) {
+          const distSq = dx * dx + dy * dy;
+          if (distSq < maxDistanceSq) {
+            const dist = Math.sqrt(distSq);
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);

@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: "Inter", "system-ui", "-apple-system", sans-serif;
+  --font-serif: "Playfair Display", "Georgia", serif;
+}
+
 /* Custom animations for Bruno Simon Portfolio */
 @keyframes fadeIn {
   from { opacity: 0; }

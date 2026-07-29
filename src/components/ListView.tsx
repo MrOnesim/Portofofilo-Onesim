@@ -29,6 +29,7 @@ import {
   Globe,
   Sun,
   Moon,
+  Download,
 } from "lucide-react";
 import sound from "../utils/SoundSystem";
 import { sendContactEmail } from "../utils/emailjs";
@@ -57,7 +58,12 @@ const stagger = {
 };
 
 export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProject }) => {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("onesim_theme") === "dark";
+    }
+    return false;
+  });
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("Tous");
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
@@ -100,8 +106,13 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
     } else {
       setContactError(true);
       setContactSent(false);
+      // Fallback: Open mailto with form contents if EmailJS not configured
+      const mailtoUrl = `mailto:gracaonesim@gmail.com?subject=${encodeURIComponent(contactForm.subject)}&body=${encodeURIComponent(`Bonjour, je suis ${contactForm.name} (${contactForm.email}).\n\n${contactForm.message}`)}`;
+      setTimeout(() => {
+        window.location.href = mailtoUrl;
+      }, 1500);
     }
-    setTimeout(() => { setContactSent(false); setContactError(false); }, 4000);
+    setTimeout(() => { setContactSent(false); setContactError(false); }, 6000);
   };
 
   const bg = isDark ? "bg-gray-950 text-gray-100" : "bg-[#f7f2ea] text-[#2c2621]";
@@ -126,6 +137,53 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
 
   return (
     <div ref={scrollRef} className={`min-h-screen ${bg} font-sans selection:bg-[#3b82f6] selection:text-white transition-colors duration-300 relative overflow-x-hidden`}>
+      {/* STICKY NAVIGATION BAR */}
+      <nav className={`sticky top-0 z-40 w-full backdrop-blur-md border-b ${border} ${isDark ? "bg-gray-950/90" : "bg-[#f7f2ea]/90"} transition-all duration-300`}>
+        <div className="max-w-6xl mx-auto px-4 py-3.5 flex items-center justify-between">
+          <button 
+            onClick={() => { sound.playClick(); scrollRef.current?.scrollTo({ top: 0, behavior: "smooth" }); }}
+            className={`font-serif font-black tracking-tight text-xl ${textPrimary} hover:text-[#3b82f6] transition-colors cursor-pointer`}
+            aria-label="Retour en haut"
+          >
+            ONESIM
+          </button>
+          <div className="hidden md:flex items-center gap-6">
+            {[
+              { id: "about", label: "À propos" },
+              { id: "projects", label: "Projets" },
+              { id: "skills", label: "Compétences" },
+              { id: "experiences", label: "Expériences" },
+              { id: "blog", label: "Blog" },
+              { id: "contact", label: "Contact" }
+            ].map((section) => (
+              <button
+                key={section.id}
+                onClick={() => {
+                  sound.playClick();
+                  const el = document.getElementById(section.id);
+                  if (el) {
+                    el.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
+                className={`text-xs font-bold uppercase tracking-wider ${textSecondary} hover:text-[#3b82f6] transition-colors cursor-pointer`}
+              >
+                {section.label}
+              </button>
+            ))}
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => { sound.playClick(); onSwitchToGame(); }}
+              className="flex items-center gap-1.5 bg-[#3b82f6] text-white hover:bg-[#2563eb] active:scale-95 transition-all px-3 py-1.5 rounded-lg font-bold text-xs"
+              aria-label="Lancer le mode de jeu interactif"
+            >
+              <Gamepad2 className="w-3.5 h-3.5 animate-pulse" />
+              <span>JOUER</span>
+            </button>
+          </div>
+        </div>
+      </nav>
+
       {/* Parallax background decoration */}
       <motion.div className="fixed top-0 right-0 w-96 h-96 rounded-full pointer-events-none opacity-[0.03] dark:opacity-[0.06]" style={{ y: bgY, background: "radial-gradient(circle, #3b82f6 0%, transparent 70%)" }} />
       <motion.div className="fixed bottom-0 left-0 w-80 h-80 rounded-full pointer-events-none opacity-[0.02] dark:opacity-[0.04]" style={{ y: useTransform(scrollYProgress, [0, 1], [0, 40]), background: "radial-gradient(circle, #10b981 0%, transparent 70%)" }} />
@@ -149,16 +207,34 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
           </div>
 
           <div className="flex items-center gap-3 shrink-0">
+            <a
+              href="/cv.pdf"
+              download="CV_Onesim.pdf"
+              onClick={() => sound.playClick()}
+              className={`flex items-center justify-center gap-2 p-3 sm:px-4 sm:py-4 rounded-xl border ${border} ${isDark ? "bg-gray-800 text-gray-300 hover:bg-gray-700" : "bg-white text-[#2c2621] hover:bg-[#fcf8f2]"} transition-all active:scale-95 text-sm font-bold`}
+              title="Télécharger mon CV"
+              aria-label="Télécharger mon CV au format PDF"
+            >
+              <Download className="w-5 h-5" />
+              <span className="hidden sm:inline">Mon CV</span>
+            </a>
             <button
-              onClick={() => { sound.playClick(); setDarkMode(!darkMode); }}
+              onClick={() => {
+                sound.playClick();
+                const newMode = !darkMode;
+                setDarkMode(newMode);
+                localStorage.setItem("onesim_theme", newMode ? "dark" : "light");
+              }}
               className={`flex items-center justify-center gap-2 p-3 sm:px-4 sm:py-4 rounded-xl border ${border} ${isDark ? "bg-gray-800 text-gray-300 hover:bg-gray-700" : "bg-white text-[#2c2621] hover:bg-[#fcf8f2]"} transition-all active:scale-95 text-sm font-bold`}
               title="Mode sombre"
+              aria-label="Activer/Désactiver le mode sombre"
             >
               {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
             <button
               onClick={() => { sound.playClick(); onSwitchToGame(); }}
               className="group flex items-center justify-center gap-2 sm:gap-3 bg-[#3b82f6] text-white hover:bg-[#2563eb] active:scale-95 transition-all px-4 sm:px-8 py-3 sm:py-5 rounded-2xl shadow-lg hover:shadow-xl shadow-[#3b82f6]/20 font-bold border-2 border-transparent hover:border-white/10"
+              aria-label="Lancer le mode de jeu interactif"
             >
               <Gamepad2 className="w-5 h-5 sm:w-6 sm:h-6 animate-bounce shrink-0" />
               <span className="flex flex-col items-start leading-none">
@@ -194,7 +270,7 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
           <section className="lg:col-span-8 space-y-12">
             
             {/* ABOUT SECTION */}
-            <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className={`${card} p-6 md:p-8 rounded-2xl border ${border}`}>
+            <motion.div id="about" variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className={`${card} p-6 md:p-8 rounded-2xl border ${border}`}>
               <h2 className={`text-3xl font-serif font-black ${textPrimary} mb-6 flex items-center gap-2`}>
                 <User className="w-7 h-7 text-[#3b82f6]" />
                 À propos de moi
@@ -228,7 +304,7 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
             </motion.div>
 
             {/* PROJECTS */}
-            <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }}>
+            <motion.div id="projects" variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }}>
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                 <h2 className={`text-3xl font-serif font-black ${textPrimary} flex items-center gap-2`}>
                   <Sparkles className="w-7 h-7 text-[#3b82f6]" />
@@ -285,7 +361,23 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
                       className={`group ${card} rounded-2xl border ${border} ${cardHover} overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col h-full`}
                     >
                       <div className="relative aspect-video md:aspect-auto md:h-48 overflow-hidden">
-                        <img src={project.images[0]} alt={project.title} className="w-full h-full object-cover" />
+                        <img 
+                          src={project.images[0]} 
+                          alt={`Capture d'écran du projet ${project.title}`} 
+                          className="w-full h-full object-cover" 
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.style.display = "none";
+                            const parent = e.currentTarget.parentElement;
+                            if (parent) {
+                              const placeholder = document.createElement("div");
+                              placeholder.className = "w-full h-full flex items-center justify-center font-bold text-white text-3xl select-none";
+                              placeholder.style.background = `linear-gradient(135deg, ${project.color} 0%, #1e1b18 100%)`;
+                              placeholder.innerText = project.title.substring(0, 2).toUpperCase();
+                              parent.appendChild(placeholder);
+                            }
+                          }}
+                        />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                         <div className="absolute bottom-4 left-4 right-4">
                           <span className="px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider text-white" style={{ backgroundColor: project.color }}>
@@ -321,7 +413,7 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
           <aside className="lg:col-span-4 flex flex-col gap-10">
             
             {/* SKILLS */}
-            <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className={`${card} p-6 rounded-2xl border ${border}`}>
+            <motion.div id="skills" variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className={`${card} p-6 rounded-2xl border ${border}`}>
               <h2 className={`text-2xl font-serif font-black ${textPrimary} mb-6 flex items-center gap-2 pb-3 border-b ${border}`}>
                 <Cpu className="w-6 h-6 text-[#3b82f6]" />
                 Competences
@@ -356,7 +448,7 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
             </motion.div>
 
             {/* EXPERIENCE */}
-            <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className={`${card} p-6 rounded-2xl border ${border}`}>
+            <motion.div id="experiences" variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className={`${card} p-6 rounded-2xl border ${border}`}>
               <h2 className={`text-2xl font-serif font-black ${textPrimary} mb-6 flex items-center gap-2 pb-3 border-b ${border}`}>
                 <Briefcase className="w-6 h-6 text-[#3b82f6]" />
                 Experiences
@@ -386,7 +478,7 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
             </motion.div>
 
             {/* BLOG */}
-            <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className={`${card} p-6 rounded-2xl border ${border}`}>
+            <motion.div id="blog" variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className={`${card} p-6 rounded-2xl border ${border}`}>
               <h2 className={`text-2xl font-serif font-black ${textPrimary} mb-6 flex items-center gap-2 pb-3 border-b ${border}`}>
                 <BookOpen className="w-6 h-6 text-[#3b82f6]" />
                 Blog Technique
