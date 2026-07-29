@@ -131,58 +131,58 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
       <motion.div className="fixed bottom-0 left-0 w-80 h-80 rounded-full pointer-events-none opacity-[0.02] dark:opacity-[0.04]" style={{ y: useTransform(scrollYProgress, [0, 1], [0, 40]), background: "radial-gradient(circle, #10b981 0%, transparent 70%)" }} />
       {/* HEADER */}
       <header className={`max-w-6xl mx-auto px-4 pt-12 pb-8 border-b ${border}`}>
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-          <div>
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-6">
+          <div className="min-w-0">
             <div className="flex items-center gap-2 mb-1">
               <span className="px-3 py-1 bg-[#3b82f6]/10 text-[#3b82f6] rounded-full text-xs font-semibold uppercase tracking-wider">
-                Developpeur Full-Stack
+                Développeur Full-Stack
               </span>
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className={`text-xs ${isDark ? "text-gray-500" : "text-gray-500"} font-medium`}>Pret a jouer</span>
+              <span className={`text-xs ${isDark ? "text-gray-500" : "text-gray-500"} font-medium hidden sm:inline`}>Prêt à coder</span>
             </div>
-            <h1 className={`text-5xl md:text-6xl font-serif font-black tracking-tight ${textPrimary} mb-2`}>
+            <h1 className={`text-4xl sm:text-5xl md:text-6xl font-serif font-black tracking-tight ${textPrimary} mb-2`}>
               ONESIM
             </h1>
-            <p className={`text-lg md:text-xl ${textSecondary} font-medium max-w-xl leading-relaxed`}>
-              Je concois des applications web modernes qui resolvent de vrais problemes grace a des technologies robustes et evolutives.
+            <p className={`text-base md:text-xl ${textSecondary} font-medium max-w-xl leading-relaxed`}>
+              Je conçois des applications web modernes qui résolvent de vrais problèmes grâce à des technologies robustes et évolutives.
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 shrink-0">
             <button
               onClick={() => { sound.playClick(); setDarkMode(!darkMode); }}
-              className={`flex items-center justify-center gap-2 px-4 py-4 rounded-xl border ${border} ${isDark ? "bg-gray-800 text-gray-300 hover:bg-gray-700" : "bg-white text-[#2c2621] hover:bg-[#fcf8f2]"} transition-all active:scale-95 text-sm font-bold`}
+              className={`flex items-center justify-center gap-2 p-3 sm:px-4 sm:py-4 rounded-xl border ${border} ${isDark ? "bg-gray-800 text-gray-300 hover:bg-gray-700" : "bg-white text-[#2c2621] hover:bg-[#fcf8f2]"} transition-all active:scale-95 text-sm font-bold`}
               title="Mode sombre"
             >
               {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
             <button
               onClick={() => { sound.playClick(); onSwitchToGame(); }}
-              className="group flex items-center justify-center gap-3 bg-[#3b82f6] text-white hover:bg-[#2563eb] active:scale-95 transition-all px-8 py-5 rounded-2xl shadow-lg hover:shadow-xl shadow-[#3b82f6]/20 font-bold text-lg border-2 border-transparent hover:border-white/10"
+              className="group flex items-center justify-center gap-2 sm:gap-3 bg-[#3b82f6] text-white hover:bg-[#2563eb] active:scale-95 transition-all px-4 sm:px-8 py-3 sm:py-5 rounded-2xl shadow-lg hover:shadow-xl shadow-[#3b82f6]/20 font-bold border-2 border-transparent hover:border-white/10"
             >
-              <Gamepad2 className="w-6 h-6 animate-bounce" />
+              <Gamepad2 className="w-5 h-5 sm:w-6 sm:h-6 animate-bounce shrink-0" />
               <span className="flex flex-col items-start leading-none">
-                <span className="text-xs text-white/80 font-normal uppercase tracking-wider mb-0.5">Explorer le mode interactif</span>
-                <span className="text-base font-black">JOUER EN 3D</span>
+                <span className="hidden sm:block text-xs text-white/80 font-normal uppercase tracking-wider mb-0.5">Mode interactif</span>
+                <span className="text-sm sm:text-base font-black">JOUER</span>
               </span>
             </button>
           </div>
         </div>
 
         {/* Quick Stats */}
-        <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-30px" }} className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
+        <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-30px" }} className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8">
           {[
             { icon: MapPin, label: "Localisation", value: "France" },
-            { icon: Briefcase, label: "Statut", value: "Developpeur Full-Stack" },
-            { icon: Cpu, label: "Projets", value: `${PROJECTS_DATA.length}+ Realises` },
-            { icon: Award, label: "Formation", value: "FuturCraft Institut" },
+            { icon: Briefcase, label: "Statut", value: "Dev Full-Stack" },
+            { icon: Cpu, label: "Projets", value: `${PROJECTS_DATA.length}+ Réalisés` },
+            { icon: Award, label: "Formation", value: "FuturCraft" },
           ].map((stat, i) => (
-            <motion.div key={i} variants={fadeUp} className={`${statBg} p-4 rounded-xl border ${border}`}>
-              <span className={`text-xs ${textMuted} block font-semibold uppercase mb-1`}>
+            <motion.div key={i} variants={fadeUp} className={`${statBg} p-3 sm:p-4 rounded-xl border ${border}`}>
+              <span className={`text-[10px] sm:text-xs ${textMuted} block font-semibold uppercase mb-1`}>
                 <stat.icon className="w-3 h-3 inline mr-1" />
                 {stat.label}
               </span>
-              <span className={`font-bold text-base ${textPrimary}`}>{stat.value}</span>
+              <span className={`font-bold text-sm sm:text-base ${textPrimary} line-clamp-1`}>{stat.value}</span>
             </motion.div>
           ))}
         </motion.div>
@@ -197,12 +197,12 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
             <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className={`${card} p-6 md:p-8 rounded-2xl border ${border}`}>
               <h2 className={`text-3xl font-serif font-black ${textPrimary} mb-6 flex items-center gap-2`}>
                 <User className="w-7 h-7 text-[#3b82f6]" />
-                A propos de moi
+                À propos de moi
               </h2>
               
               <div className={`space-y-4 ${textBody} leading-relaxed`}>
-                <p>Je suis <strong className={textPrimary}>Graça Onesim Géraldo Ema-ayé</strong>, developpeur Full-Stack passionne par la creation d'applications web modernes et performantes.</p>
-                <p>Ma philosophie : transformer des idees en produits numeriques concrets qui apportent une reelle valeur ajoutee. Chaque projet est une opportunite d'apprendre, d'innover et de repousser mes limites.</p>
+                <p>Je suis <strong className={textPrimary}>Graça Onesim Géraldo Ema-ayé</strong>, développeur Full-Stack passionné par la création d'applications web modernes et performantes.</p>
+                <p>Ma philosophie&nbsp;: transformer des idées en produits numériques concrets qui apportent une réelle valeur ajoutée. Chaque projet est une opportunité d'apprendre, d'innover et de repousser mes limites.</p>
               </div>
 
               {/* Timeline */}
@@ -210,11 +210,11 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
                 <h3 className={`text-lg font-black ${textPrimary} mb-4`}>Mon Parcours</h3>
                 <div className="relative border-l-2 border-[#3b82f6]/30 pl-6 space-y-6">
                   {[
-                    { year: "2025", title: "Objectif : Creer une entreprise SaaS internationale", desc: "Vision a long terme pour developper des solutions innovantes." },
-                    { year: "2025", title: "Developpement de projets personnels", desc: "Employra RH, GEN3RVTO, Ayiha-Boost, Vano-Baby." },
-                    { year: "2025", title: "Stage Programme Futur", desc: "Developpeur Full-Stack Stagiaire, participation a des solutions web." },
-                    { year: "2025", title: "Formation Full-Stack", desc: "FuturCraft Institut - HTML, CSS, JS, React, Git, API, Tailwind, NestJS." },
-                    { year: "2024", title: "Baccalaureat", desc: "Obtention du diplome." }
+                    { year: "2025", title: "Objectif : Créer une entreprise SaaS internationale", desc: "Vision à long terme pour développer des solutions innovantes." },
+                    { year: "2025", title: "Développement de projets personnels", desc: "Employra RH, GEN3RVTO, Ayiha-Boost, Vano-Baby." },
+                    { year: "2025", title: "Stage Programme Futur", desc: "Développeur Full-Stack Stagiaire, participation à des solutions web." },
+                    { year: "2025", title: "Formation Full-Stack", desc: "FuturCraft Institut — HTML, CSS, JS, React, Git, API, Tailwind, NestJS." },
+                    { year: "2024", title: "Baccalauréat", desc: "Obtention du diplôme." }
                   ].map((item, i) => (
                     <motion.div key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="relative">
                       <div className="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-[#3b82f6] border-2 border-white" />
@@ -232,7 +232,7 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                 <h2 className={`text-3xl font-serif font-black ${textPrimary} flex items-center gap-2`}>
                   <Sparkles className="w-7 h-7 text-[#3b82f6]" />
-                  Projets & Realisations
+                  Projets &amp; Réalisations
                 </h2>
 
                 <div className={`flex flex-wrap gap-1 ${categoryBg} p-1 rounded-xl`}>
@@ -310,7 +310,7 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
                 </motion.div>
               ) : (
                 <div className={`text-center py-16 ${card} rounded-2xl border border-dashed ${border}`}>
-                  <p className={`${textSecondary} font-medium text-lg mb-2`}>Aucun projet trouve</p>
+                  <p className={`${textSecondary} font-medium text-lg mb-2`}>Aucun projet trouvé</p>
                   <p className={`text-sm ${textMuted}`}>Essayez d'autres termes de recherche.</p>
                 </div>
               )}
@@ -415,22 +415,31 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
             <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className={`${card} p-6 rounded-2xl border ${border}`}>
               <h2 className={`text-2xl font-serif font-black ${textPrimary} mb-6 flex items-center gap-2 pb-3 border-b ${border}`}>
                 <Star className="w-6 h-6 text-[#3b82f6]" />
-                Temoignages
+                Témoignages
               </h2>
               <div className="space-y-4">
                 {TESTIMONIALS_DATA.map((t) => (
                   <motion.div key={t.id} whileHover={{ scale: 1.01 }} className={`${sectionBg} p-4 rounded-xl border ${borderLight}`}>
                     <p className={`text-xs ${textBody} italic leading-relaxed mb-3`}>"{t.content}"</p>
-                    <div>
-                      <p className={`text-sm font-bold ${textPrimary}`}>{t.name}</p>
-                      <p className={`text-[10px] ${textMuted}`}>{t.role}</p>
+                    <div className="flex items-center gap-3">
+                      {/* Avatar with initials */}
+                      <div
+                        className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-black shrink-0"
+                        style={{ backgroundColor: "#3b82f6" }}
+                      >
+                        {t.name.split(" ").map((w) => w[0]).join("").substring(0, 2).toUpperCase()}
+                      </div>
+                      <div>
+                        <p className={`text-sm font-bold ${textPrimary}`}>{t.name}</p>
+                        <p className={`text-[10px] ${textMuted}`}>{t.role}</p>
+                      </div>
                     </div>
                   </motion.div>
                 ))}
               </div>
             </motion.div>
 
-            {/* CERTIFICATIONS PLACEHOLDER */}
+            {/* CERTIFICATIONS */}
             <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className={`${card} p-6 rounded-2xl border ${border}`}>
               <h2 className={`text-2xl font-serif font-black ${textPrimary} mb-4 flex items-center gap-2 pb-2 border-b ${border}`}>
                 <Award className="w-6 h-6 text-[#3b82f6]" />
@@ -440,7 +449,7 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
                 {["OpenAI", "Google", "freeCodeCamp", "Meta", "Microsoft"].map((cert) => (
                   <span key={cert} className={`px-3 py-1.5 ${tagBg} rounded-lg text-xs font-bold border ${borderLight} ${isDark ? "hover:bg-gray-700" : "hover:bg-[#ebdccb]/40"} transition-colors cursor-default`}>{cert}</span>
                 ))}
-                <span className="px-3 py-1.5 bg-[#3b82f6]/10 text-[#3b82f6] rounded-lg text-xs font-bold border border-[#3b82f6]/20">Prochainement...</span>
+                <span className="px-3 py-1.5 bg-[#3b82f6]/10 text-[#3b82f6] rounded-lg text-xs font-bold border border-[#3b82f6]/20">Prochainement…</span>
               </div>
             </motion.div>
 
@@ -452,9 +461,9 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
               </h2>
               
               {contactSent ? (
-                <div className="bg-emerald-50 border border-emerald-200 text-emerald-700 p-4 rounded-xl text-sm font-bold text-center">Message envoye avec succes !</div>
+                <div className="bg-emerald-50 border border-emerald-200 text-emerald-700 p-4 rounded-xl text-sm font-bold text-center">Message envoyé avec succès&nbsp;! ✅</div>
               ) : contactError ? (
-                <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl text-sm font-bold text-center">Erreur d envoi. Configure EmailJS dans src/utils/emailjs.ts ou reessaye.</div>
+                <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl text-sm font-bold text-center">Erreur d'envoi. Configurez EmailJS dans <code className="font-mono text-xs">src/utils/emailjs.ts</code> ou réessayez.</div>
               ) : (
                 <form onSubmit={handleContactSubmit} className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -487,7 +496,7 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
             <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className={`${card} p-6 rounded-2xl border ${border}`}>
               <h2 className={`text-2xl font-serif font-black ${textPrimary} mb-4 flex items-center gap-2 pb-2 border-b ${border}`}>
                 <Globe className="w-6 h-6 text-[#3b82f6]" />
-                Reseaux & Contact
+                Réseaux &amp; Contact
               </h2>
 
               <div className="grid grid-cols-2 gap-3 mb-6">
@@ -510,7 +519,7 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
               </div>
 
               <div className={`text-center pt-3 border-t ${borderLight}`}>
-                <p className={`text-[10px] ${textMuted} font-medium`}>© 2025-2026 Onesim · Concu avec soin en React & Canvas</p>
+                <p className={`text-[10px] ${textMuted} font-medium`}>© 2025–2026 Onesim · Conçu avec soin en React &amp; Canvas</p>
               </div>
             </motion.div>
           </aside>

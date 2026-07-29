@@ -183,15 +183,22 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
   const [enableUnderglow, setEnableUnderglow] = useState(true);
 
   // Dynamic Minimap Scale
-  const [showMinimap, setShowMinimap] = useState(true);
-  const [showQuestTracker, setShowQuestTracker] = useState(true);
+  const [showMinimap, setShowMinimap] = useState(
+    typeof window !== "undefined" && window.innerWidth >= 640
+  );
+  const [showQuestTracker, setShowQuestTracker] = useState(
+    typeof window !== "undefined" && window.innerWidth >= 640
+  );
   const [showCarCustomizer, setShowCarCustomizer] = useState(true);
 
   // Game metrics
   const [coinsCollected, setCoinsCollected] = useState(0);
   const [bowlingScore, setBowlingScore] = useState(0);
   const [speedKmh, setSpeedKmh] = useState(0);
-  const [showControlsHint, setShowControlsHint] = useState(true);
+  // On mobile, collapse overlays by default so they don't block the canvas
+  const [showControlsHint, setShowControlsHint] = useState(
+    typeof window !== "undefined" && window.innerWidth >= 640
+  );
 
   // Real-time coordinates for live minimap reporting
   const [carCoords, setCarCoords] = useState({ x: 1250, y: 1400 });
@@ -1799,9 +1806,9 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
         </div>
       </div>
 
-      {/* MODERN GLASS RADAR MINIMAP (Top-Right Panel) */}
+      {/* MODERN GLASS RADAR MINIMAP (Top-Right Panel) — hidden on mobile to free canvas space */}
       {showMinimap && (
-        <div className="absolute top-20 right-4 bg-slate-950/85 backdrop-blur-md border border-white/10 p-3 rounded-2xl shadow-xl z-20 w-[180px] pointer-events-auto">
+        <div className="absolute top-20 right-4 bg-slate-950/85 backdrop-blur-md border border-white/10 p-3 rounded-2xl shadow-xl z-20 w-[180px] pointer-events-auto hidden sm:block">
           <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-white/10">
               <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider flex items-center gap-1">
               <Compass className="w-3.5 h-3.5 text-[#ff3e00] animate-pulse" />
@@ -1898,19 +1905,19 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
         </div>
       )}
 
-      {/* QUICK FLOATING TRIGGER FOR MINIMAP */}
+      {/* QUICK FLOATING TRIGGER FOR MINIMAP — only on desktop */}
       {!showMinimap && (
         <button
           onClick={() => { sound.playClick(); setShowMinimap(true); }}
-          className="absolute top-20 right-4 bg-[#fffcf7]/90 border border-[#ebdccb] px-3 py-1.5 rounded-xl text-[10px] font-bold text-[#2c2621] z-20 shadow-sm"
+          className="absolute top-20 right-4 bg-[#fffcf7]/90 border border-[#ebdccb] px-3 py-1.5 rounded-xl text-[10px] font-bold text-[#2c2621] z-20 shadow-sm hidden sm:block"
         >
-          🗺️ Show Radar Map
+          🗺️ Carte
         </button>
       )}
 
-      {/* CONTROLS GUIDE PANEL OVERLAY */}
+      {/* CONTROLS GUIDE PANEL OVERLAY — hidden on mobile (touch buttons replace it) */}
       {showControlsHint && (
-        <div className="absolute top-20 left-4 right-4 sm:right-auto max-w-sm bg-[#fffcf7]/95 border-2 border-[#2c2621] p-5 rounded-3xl shadow-xl z-20">
+        <div className="absolute top-20 left-4 right-4 sm:right-auto max-w-sm bg-[#fffcf7]/95 border-2 border-[#2c2621] p-5 rounded-3xl shadow-xl z-20 hidden sm:block">
           <div className="flex justify-between items-center mb-3">
             <h2 className="text-xs font-bold uppercase tracking-wider text-[#8c7460] flex items-center gap-1.5">
               <Zap className="w-4 h-4 text-[#ff3e00] animate-pulse" />
@@ -1973,7 +1980,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
 
       {/* REAL-TIME SANDBOX QUESTS TRACKER (Middle-Left Panel) */}
       {showQuestTracker && (
-      <div className="absolute lg:top-[420px] top-72 left-4 right-4 lg:right-auto max-w-sm bg-slate-950/85 backdrop-blur-md border border-white/10 p-4 rounded-3xl shadow-xl z-20 pointer-events-auto text-white">
+      <div className="absolute lg:top-[420px] top-28 left-4 right-4 lg:right-auto max-w-sm bg-slate-950/85 backdrop-blur-md border border-white/10 p-4 rounded-3xl shadow-xl z-20 pointer-events-auto text-white hidden sm:block">
         <h3 className="text-xs font-bold uppercase tracking-wider text-gray-300 flex items-center gap-1.5 mb-3 border-b border-white/10 pb-1.5">
           <Zap className="w-4 h-4 text-[#ff3e00] animate-bounce" />
           Quest Tracker
@@ -2001,10 +2008,10 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
         </div>
       </div>)}
 
-      {/* QUICK FLOATING TRIGGER FOR QUEST TRACKER */}
+      {/* QUICK FLOATING TRIGGER FOR QUEST TRACKER — desktop only */}
       {!showQuestTracker && (
-        <button onClick={() => { sound.playClick(); setShowQuestTracker(true); }} className="absolute top-[300px] left-4 bg-[#fffcf7]/90 border border-[#ebdccb] px-3 py-1.5 rounded-xl text-[10px] font-bold text-[#2c2621] z-20 shadow-sm">
-          📋 Show Quests
+        <button onClick={() => { sound.playClick(); setShowQuestTracker(true); }} className="absolute top-[300px] left-4 bg-[#fffcf7]/90 border border-[#ebdccb] px-3 py-1.5 rounded-xl text-[10px] font-bold text-[#2c2621] z-20 shadow-sm hidden sm:block">
+          📋 Quêtes
         </button>
       )}
 
@@ -2183,13 +2190,81 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
         </button>
       </div>
 
-      {/* PICKUP HINT — floating tag */}
-      <div className="absolute bottom-20 sm:bottom-24 left-4 pointer-events-none z-20 opacity-70 hover:opacity-100 transition-opacity">
+      {/* PICKUP HINT — hidden on mobile so it doesn't overlap touch controls */}
+      <div className="absolute bottom-20 sm:bottom-24 left-4 pointer-events-none z-20 opacity-70 hover:opacity-100 transition-opacity hidden sm:block">
         <div className="bg-slate-900/80 backdrop-blur-sm border border-white/10 text-white/80 text-[10px] font-mono font-bold px-3 py-2 rounded-xl flex items-center gap-1.5 shadow-lg animate-pulse">
           <span className="w-2 h-2 rounded-sm bg-cyan-400 animate-spin" />
           Collecte les cubes lumineux ★
         </div>
       </div>
+
+      {/* MOBILE COMPACT INFO BAR — replaces all hidden panels on small screens */}
+      <div className="absolute top-20 left-4 right-4 flex sm:hidden items-center justify-between gap-2 z-20 pointer-events-auto">
+        <div className="flex items-center gap-1.5 bg-slate-950/80 backdrop-blur-md border border-white/10 px-3 py-2 rounded-2xl text-white">
+          <span className="text-[10px] font-mono font-bold text-amber-400">⚡ {speedKmh} km/h</span>
+          <span className="text-white/20">|</span>
+          <span className="text-[10px] font-mono text-amber-500">🪙 {coinsCollected}/5</span>
+          <span className="text-white/20">|</span>
+          <span className="text-[10px] font-mono text-cyan-400">★ {collectedPickupIds.length}/5</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <button
+            onClick={() => { sound.playClick(); setShowQuestTracker(!showQuestTracker); }}
+            className="bg-slate-950/80 backdrop-blur-md border border-white/10 px-2.5 py-2 rounded-xl text-[11px] font-bold text-white"
+          >
+            📋
+          </button>
+          <button
+            onClick={() => { sound.playClick(); setShowMinimap(!showMinimap); }}
+            className="bg-slate-950/80 backdrop-blur-md border border-white/10 px-2.5 py-2 rounded-xl text-[11px] font-bold text-white"
+          >
+            🗺️
+          </button>
+        </div>
+      </div>
+
+      {/* QUEST TRACKER — mobile version: compact, positioned below info bar */}
+      {showQuestTracker && (
+        <div className="absolute top-32 left-4 right-4 sm:hidden bg-slate-950/90 backdrop-blur-md border border-white/10 p-3 rounded-2xl shadow-xl z-20 pointer-events-auto text-white max-h-48 overflow-y-auto">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-[10px] font-bold uppercase tracking-wider text-gray-300">⚡ Quêtes</h3>
+            <button onClick={() => setShowQuestTracker(false)} className="text-gray-400 hover:text-white p-1"><X className="w-4 h-4" /></button>
+          </div>
+          <div className="grid grid-cols-2 gap-1.5">
+            {Object.entries(quests).map(([key, q]) => (
+              <div key={key} className={`flex items-center gap-1.5 text-[9px] p-1.5 rounded-lg ${q.done ? "bg-emerald-950/60 text-emerald-400" : "bg-white/5 text-gray-400"}`}>
+                {q.done ? <CheckCircle className="w-3 h-3 shrink-0 text-emerald-400" /> : <div className="w-3 h-3 rounded-full border border-gray-600 shrink-0" />}
+                <span className={`leading-tight ${q.done ? "line-through" : ""}`}>{q.name.split("(")[0].trim()}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* MINIMAP — mobile version: compact, shown when toggled */}
+      {showMinimap && (
+        <div className="absolute top-32 right-4 sm:hidden bg-slate-950/90 backdrop-blur-md border border-white/10 p-2 rounded-2xl shadow-xl z-20 w-36 pointer-events-auto">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-[9px] text-gray-400 font-bold uppercase">🗺️ Carte</span>
+            <button onClick={() => setShowMinimap(false)} className="text-gray-400 hover:text-white"><X className="w-3.5 h-3.5" /></button>
+          </div>
+          <div className="relative w-full h-28 bg-slate-900/60 rounded-xl overflow-hidden border border-white/5">
+            <div
+              className="absolute w-2 h-2 bg-[#ff3e00] rounded-sm"
+              style={{
+                left: `${((carCoords.x / 2500) * 100).toFixed(0)}%`,
+                top: `${((carCoords.y / 2500) * 100).toFixed(0)}%`,
+                transform: "translate(-50%,-50%)"
+              }}
+            />
+            {PROJECTS_DATA.map((p, i) => {
+              const positions = [{ top: "35%", left: "75%" }, { top: "30%", left: "60%" }, { top: "40%", left: "65%" }, { top: "28%", left: "70%" }, { top: "38%", left: "55%" }];
+              const pos = positions[i] || positions[0];
+              return <div key={p.id} className="absolute w-1.5 h-1.5 rounded-full" style={{ backgroundColor: p.color, top: pos.top, left: pos.left }} />;
+            })}
+          </div>
+        </div>
+      )}
 
       {/* CONTEXTUAL DIALOGUE BANNER (Discovered bills) */}
       {activeBillboard && activeBillboard.projectRef && (
