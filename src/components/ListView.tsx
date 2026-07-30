@@ -647,7 +647,7 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
               aria-label="Mode sombre">
               {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
-            <a href="/cv.pdf" download="CV_Onesim.pdf" onClick={() => sound.playClick()}
+            <a href="/CV-Onesim.pdf" download="CV_Onesim.pdf" onClick={() => sound.playClick()}
               className={`hidden sm:flex items-center justify-center gap-1.5 p-2 rounded-lg border ${border} ${isDark ? "hover:bg-gray-800 text-gray-300" : "hover:bg-white text-[#2c2621]"} transition-all text-xs font-bold`}
               aria-label="Télécharger mon CV">
               <Download className="w-4 h-4" />
@@ -682,7 +682,7 @@ export const ListView: React.FC<ListViewProps> = ({ onSwitchToGame, onOpenProjec
                   </button>
                 ))}
                 <hr className={`my-2 ${border}`} />
-                <a href="/cv.pdf" download="CV_Onesim.pdf" onClick={() => sound.playClick()}
+                <a href="/CV-Onesim.pdf" download="CV_Onesim.pdf" onClick={() => sound.playClick()}
                   className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-bold ${textSecondary} hover:text-[#3b82f6] transition-all`}>
                   <Download className="w-4 h-4" />
                   Télécharger mon CV
