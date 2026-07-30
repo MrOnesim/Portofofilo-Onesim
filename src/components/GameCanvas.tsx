@@ -16,7 +16,11 @@ import {
   Zap,
   CheckCircle,
   Compass,
-  X
+  X,
+  Map,
+  Crosshair,
+  ClipboardList,
+  Wrench
 } from "lucide-react";
 import sound from "../utils/SoundSystem";
 
@@ -1974,7 +1978,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
           onClick={() => { sound.playClick(); setShowMinimap(true); }}
           className="absolute top-20 right-4 bg-[#fffcf7]/90 border border-[#ebdccb] px-3 py-1.5 rounded-xl text-[10px] font-bold text-[#2c2621] z-20 shadow-sm hidden sm:block"
         >
-          🗺️ Carte
+          <Map className="w-3.5 h-3.5" /> Carte
         </button>
       )}
 
@@ -2029,7 +2033,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
             </div>
 
             <div className="pt-2.5 border-t border-[#ebdccb]/60 flex flex-col gap-1 text-[11px]">
-              <p className="font-bold text-[#3b82f6]">🎯 Objectifs:</p>
+              <p className="font-bold text-[#3b82f6]"><Crosshair className="w-3.5 h-3.5 inline" /> Objectifs:</p>
               <p>• Detruis les lettres geantes roses!</p>
               <p>• Eboute la pile de competences!</p>
               <p>• Saute de la rampe a toute vitesse!</p>
@@ -2074,7 +2078,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
       {/* QUICK FLOATING TRIGGER FOR QUEST TRACKER — desktop only */}
       {!showQuestTracker && (
         <button onClick={() => { sound.playClick(); setShowQuestTracker(true); }} className="absolute top-[300px] left-4 bg-[#fffcf7]/90 border border-[#ebdccb] px-3 py-1.5 rounded-xl text-[10px] font-bold text-[#2c2621] z-20 shadow-sm hidden sm:block">
-          📋 Quêtes
+          <ClipboardList className="w-3.5 h-3.5" /> Quêtes
         </button>
       )}
 
@@ -2085,7 +2089,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
           
           <div className="flex items-center justify-between mb-2">
             <span className="text-[10px] text-[#8c7460] font-black uppercase tracking-wider font-mono">
-              🚗 Garage
+              <Wrench className="w-3.5 h-3.5" /> Garage
             </span>
             <button onClick={() => setShowCarCustomizer(false)} className="text-[#8c7460] hover:text-[#2c2621] transition-colors"><X className="w-5 h-5 sm:w-3.5 sm:h-3.5" /></button>
           </div>
@@ -2188,7 +2192,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
       {/* QUICK FLOATING TRIGGER FOR GARAGE */}
       {!showCarCustomizer && (
         <button onClick={() => { sound.playClick(); setShowCarCustomizer(true); }} className="absolute bottom-4 left-4 bg-[#fffcf7]/90 border border-[#ebdccb] px-3 py-1.5 rounded-xl text-[10px] font-bold text-[#2c2621] z-20 shadow-sm">
-          🚗 Show Garage
+          <Wrench className="w-3.5 h-3.5" /> Show Garage
         </button>
       )}
 
@@ -2276,13 +2280,13 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
             onClick={() => { sound.playClick(); setShowQuestTracker(!showQuestTracker); }}
             className="bg-slate-950/80 backdrop-blur-md border border-white/10 px-2.5 py-2 rounded-xl text-[11px] font-bold text-white"
           >
-            📋
+            <ClipboardList className="w-4 h-4" />
           </button>
           <button
             onClick={() => { sound.playClick(); setShowMinimap(!showMinimap); }}
             className="bg-slate-950/80 backdrop-blur-md border border-white/10 px-2.5 py-2 rounded-xl text-[11px] font-bold text-white"
           >
-            🗺️
+            <Map className="w-4 h-4" />
           </button>
         </div>
       </div>
@@ -2291,7 +2295,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
       {showQuestTracker && (
         <div className="absolute top-32 left-4 right-4 sm:hidden bg-slate-950/90 backdrop-blur-md border border-white/10 p-3 rounded-2xl shadow-xl z-20 pointer-events-auto text-white max-h-48 overflow-y-auto">
           <div className="flex items-center justify-between mb-2">
-            <h3 className="text-[10px] font-bold uppercase tracking-wider text-gray-300">⚡ Quêtes</h3>
+            <h3 className="text-[10px] font-bold uppercase tracking-wider text-gray-300"><Zap className="w-3 h-3 inline" /> Quêtes</h3>
             <button onClick={() => setShowQuestTracker(false)} className="text-gray-400 hover:text-white p-1"><X className="w-4 h-4" /></button>
           </div>
           <div className="grid grid-cols-2 gap-1.5">
@@ -2309,7 +2313,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ onSwitchToClassic, onOpe
       {showMinimap && (
         <div className="absolute top-32 right-4 sm:hidden bg-slate-950/90 backdrop-blur-md border border-white/10 p-2 rounded-2xl shadow-xl z-20 w-36 pointer-events-auto">
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-[9px] text-gray-400 font-bold uppercase">🗺️ Carte</span>
+            <span className="text-[9px] text-gray-400 font-bold uppercase"><Map className="w-3 h-3 inline" /> Carte</span>
             <button onClick={() => setShowMinimap(false)} className="text-gray-400 hover:text-white"><X className="w-3.5 h-3.5" /></button>
           </div>
           <div className="relative w-full h-28 bg-slate-900/60 rounded-xl overflow-hidden border border-white/5">
