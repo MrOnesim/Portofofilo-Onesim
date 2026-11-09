@@ -106,6 +106,14 @@ test("responsive layouts, images and WCAG A/AA accessibility pass", async ({ pag
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
   }
 
+  await page.setViewportSize({ width: 360, height: 800 });
+  const mobileBackground = await page.locator(".og-site-bg").evaluate((element) => {
+    const styles = getComputedStyle(element);
+    return { position: styles.backgroundPosition, opacity: Number(styles.opacity) };
+  });
+  expect(mobileBackground.position).toBe("74% 50%");
+  expect(mobileBackground.opacity).toBeGreaterThan(0.55);
+
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.waitForTimeout(250);
   for (const id of ["projets", "collaborations", "technologies", "contact"]) {

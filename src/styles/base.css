@@ -43,6 +43,14 @@
     }
   }
 
+  @media (max-width: 720px) {
+    .og-site-bg {
+      background-position: 74% center;
+      opacity: 0.68;
+      filter: contrast(1.1) brightness(0.7);
+    }
+  }
+
   img {
     display: block;
     max-width: 100%;
