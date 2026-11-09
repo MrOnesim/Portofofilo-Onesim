@@ -1,0 +1,114 @@
+/* ============================================================================
+   SECTIONS — cartouches (OG—N°), intros éditoriales partagées
+   ========================================================================== */
+
+/* ------------------------------------------------------ SectionBar technique */
+.og-section-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px clamp(18px, 3vw, 40px);
+  border-bottom: 1px solid var(--sand);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--muted-dark);
+}
+
+.og-section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--sky);
+  font-weight: 600;
+}
+
+.og-section-tag::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--blue-deep);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.og-section-code {
+  color: var(--muted-dark);
+}
+
+.og-section-meta {
+  color: var(--muted-dark);
+}
+
+.og-section-bar-dark {
+  border-bottom-color: var(--line-soft);
+  color: var(--muted-dark);
+}
+
+.og-section-bar-dark .og-section-tag {
+  color: var(--sky);
+}
+
+.og-section-bar-dark .og-section-tag::before {
+  background: var(--sky);
+  box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.15);
+}
+
+.og-section-bar-dark .og-section-code,
+.og-section-bar-dark .og-section-meta {
+  color: var(--muted-dark-2);
+}
+
+@media (max-width: 720px) {
+  .og-section-meta {
+    display: none;
+  }
+  .og-section-bar {
+    padding-inline: 18px;
+  }
+}
+
+/* -------------------------------------------------- Intro : titre + lead */
+.og-projects-intro {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: clamp(24px, 5vw, 84px);
+  padding: var(--space-section) 0 clamp(36px, 5vw, 64px);
+}
+
+.og-projects-intro .og-lead-text {
+  padding-bottom: 10px;
+  justify-self: end;
+  max-width: 42ch;
+}
+
+@media (max-width: 900px) {
+  .og-projects-intro {
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: calc(var(--space-section) * 0.7);
+  }
+  .og-projects-intro .og-lead-text {
+    justify-self: start;
+    padding-bottom: 0;
+  }
+}
+
+/* --------------------------------------------------------- Grandes sections */
+.og-section-paper,
+.og-section-night {
+  position: relative;
+}
+
+/* Filet de séparation technique en haut des sections claires */
+.og-section-paper::after {
+  content: "";
+  position: absolute;
+  left: clamp(18px, 3vw, 40px);
+  right: clamp(18px, 3vw, 40px);
+  bottom: -1px;
+  height: 1px;
+  background: var(--sand);
+}

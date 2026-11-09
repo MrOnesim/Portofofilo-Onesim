@@ -1,0 +1,57 @@
+﻿@import "tailwindcss";
+@import "./fonts.css";
+@import "./styles/tokens.css";
+@import "./styles/base.css";
+@import "./styles/chrome.css";
+@import "./styles/hero.css";
+@import "./styles/sections.css";
+@import "./styles/about.css";
+@import "./styles/projects.css";
+@import "./styles/stack.css";
+@import "./styles/contact-footer.css";
+
+/* ============================================================================
+   BLUEPRINT NOCTURNE — assemblage, mouvement réduit, impression
+   ========================================================================== */
+
+/* Mouvement réduit : tout devient statique et lisible immédiatement */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .og-rise {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .og-word-inner {
+    transform: none !important;
+  }
+
+  .og-marquee-track {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+@media print {
+  body {
+    background: #ffffff;
+  }
+  .og-header,
+  .og-scroll-progress,
+  .og-menu-overlay,
+  .og-skip-link,
+  .og-marquee {
+    display: none !important;
+  }
+}

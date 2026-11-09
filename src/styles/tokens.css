@@ -1,0 +1,83 @@
+/* ============================================================================
+   BLUEPRINT NOCTURNE — Tokens
+   Encre profonde, papier albâtre, signal bleu, accent ambre rare.
+   ========================================================================== */
+:root {
+  /* Encre — échelle nocturne */
+  --ink-950: #04070f;
+  --ink-900: #070d1a;
+  --ink-850: #0b1322;
+  --ink-800: #101b30;
+  --ink-750: #152238;
+  --ink-700: #1d2d49;
+
+  /* Lignes blueprint sur encre */
+  --line-soft: rgba(125, 211, 252, 0.1);
+  --line: rgba(125, 211, 252, 0.22);
+  --line-strong: rgba(125, 211, 252, 0.4);
+
+  /* Albâtre — sections papier */
+  --paper: #f2f0e9;
+  --paper-2: #e9e7de;
+  --surface: #fbfaf6;
+  --sand: #d8d5c9;
+
+  /* Texte */
+  --ink-text: #0d1626;
+  --muted: #4f5f76;
+  --muted-2: #56677f;
+  --muted-dark: #93a8c8;
+  --muted-dark-2: #8298b8;
+
+  /* Signals */
+  --blue: #2563eb;
+  --blue-deep: #1d4ed8;
+  --blue-ink: #1e40af;
+  --sky: #7dd3fc;
+  --sky-soft: #bae6fd;
+  --amber: #f0b429;
+  --teal: #2dd4bf;
+  --teal-deep: #0f766e;
+
+  /* Grille blueprint (background-image utilitaire) */
+  --grid-dark:
+    linear-gradient(rgba(125, 211, 252, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(125, 211, 252, 0.045) 1px, transparent 1px),
+    linear-gradient(rgba(125, 211, 252, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(125, 211, 252, 0.09) 1px, transparent 1px);
+  --grid-paper:
+    linear-gradient(rgba(37, 99, 235, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37, 99, 235, 0.05) 1px, transparent 1px),
+    linear-gradient(rgba(37, 99, 235, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37, 99, 235, 0.1) 1px, transparent 1px);
+  --grid-size: 28px 28px, 28px 28px, 140px 140px, 140px 140px;
+
+  /* Voix typographiques */
+  --font-sans: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  --font-serif: "Instrument Serif", Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Échelle fluide */
+  --step-mono: 11px;
+  --step-xs: 12px;
+  --step-sm: 13.5px;
+  --step-body: 15.5px;
+  --step-lead: clamp(1.05rem, 1.35vw, 1.25rem);
+  --display-md: clamp(2.4rem, 4.6vw, 4rem);
+  --display-xl: clamp(2.9rem, 6.4vw, 5.6rem);
+  --display-hero: clamp(3.6rem, 12.5vw, 10.5rem);
+
+  /* Rythme */
+  --space-section: clamp(84px, 10vw, 150px);
+  --radius-sm: 6px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-pill: 999px;
+
+  /* Mouvement */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 0.28s;
+  --dur-med: 0.55s;
+  --dur-slow: 0.9s;
+}

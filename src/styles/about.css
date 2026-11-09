@@ -1,0 +1,289 @@
+/* ============================================================================
+   À PROPOS — la fiche d'atelier : méthode, parcours, marge annotée
+   ========================================================================== */
+
+.og-about-header {
+  padding: var(--space-section) 0 clamp(48px, 6vw, 80px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 22px;
+}
+
+.og-about-text {
+  margin: 0;
+  max-width: 62ch;
+  font-size: clamp(1.05rem, 1.4vw, 1.28rem);
+  line-height: 1.78;
+  color: #eef3fc;
+}
+
+.og-about-text strong {
+  color: var(--sky);
+  font-weight: 600;
+}
+
+.og-about-cta-row {
+  display: flex;
+  align-items: center;
+  gap: clamp(18px, 3vw, 36px);
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+/* Lien circulaire éditorial */
+.og-circle-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #eef3fc;
+  text-decoration: none;
+  background: transparent;
+  border: 0;
+  padding: 6px 0;
+  transition: color var(--dur-fast) ease;
+}
+
+.og-circle-badge {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line-soft);
+  color: #eef3fc;
+  transition: background var(--dur-fast) ease, color var(--dur-fast) ease, transform var(--dur-fast) var(--ease-out);
+}
+
+.og-circle-link:hover .og-circle-badge {
+  background: var(--blue-deep);
+  border-color: var(--sky);
+  color: #ffffff;
+  transform: rotate(45deg);
+}
+
+.og-circle-link.is-light {
+  color: #f2f7ff;
+}
+
+.og-circle-badge.is-light {
+  border-color: var(--line-strong);
+  color: var(--sky);
+}
+
+.og-circle-link.is-light:hover {
+  color: var(--sky);
+}
+
+.og-circle-link.is-light:hover .og-circle-badge.is-light {
+  background: var(--sky);
+  border-color: var(--sky);
+  color: var(--ink-950);
+}
+
+/* -------------------------------------------------- bento : fiche + parcours */
+.og-about-bento {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: clamp(22px, 3vw, 44px);
+  padding-bottom: var(--space-section);
+  align-items: stretch;
+}
+
+.og-about-visual-card {
+  display: flex;
+  min-width: 0;
+}
+
+/* Fiche technique : méthode d'ingénierie sur panneau nocturne */
+.og-engineering-sheet {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  border-radius: var(--radius-lg);
+  padding: clamp(26px, 3vw, 40px);
+  color: #eef3fc;
+  background: transparent;
+  border: 1px solid var(--line-soft);
+  overflow: hidden;
+}
+
+.og-engineering-sheet::after {
+  content: "FIG. 01";
+  position: absolute;
+  bottom: 18px;
+  right: 22px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--muted-dark-2);
+}
+
+.og-sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--line-soft);
+  padding-bottom: 16px;
+}
+
+.og-sheet-header .og-eyebrow {
+  color: var(--sky);
+}
+
+.og-sheet-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--muted-dark-2);
+}
+
+.og-sheet-title {
+  margin: 0;
+  font-size: clamp(1.6rem, 2.4vw, 2.3rem);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+  max-width: 22ch;
+}
+
+.og-sheet-title em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--sky);
+  letter-spacing: 0;
+}
+
+.og-sheet-pillars {
+  display: flex;
+  flex-direction: column;
+}
+
+.og-sheet-pillar {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 18px;
+  padding: 18px 4px;
+  border-top: 1px solid var(--line-soft);
+  transition: background var(--dur-fast) ease, padding-left var(--dur-fast) var(--ease-out);
+}
+
+.og-sheet-pillar:hover {
+  background: rgba(125, 211, 252, 0.05);
+  padding-left: 12px;
+}
+
+.og-sheet-code {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--sky);
+  letter-spacing: 0.12em;
+  padding-top: 3px;
+}
+
+.og-sheet-pillar strong {
+  display: block;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+  color: #f4f7ff;
+}
+
+.og-sheet-pillar p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--muted-dark);
+}
+
+/* ------------------------------------------- colonne droite : parcours */
+.og-about-education {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.og-edu-head h3 {
+  margin: 12px 0 0;
+  font-size: clamp(1.35rem, 1.9vw, 1.9rem);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  max-width: 26ch;
+}
+
+.og-edu-timeline {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: transparent;
+  overflow: hidden;
+}
+
+.og-edu-card {
+  padding: 22px 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+
+.og-edu-card + .og-edu-card {
+  border-top: 1px solid var(--line-soft);
+}
+
+.og-edu-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.og-edu-period {
+  color: var(--sky);
+  font-weight: 600;
+}
+
+.og-edu-school {
+  color: var(--muted-dark);
+}
+
+.og-edu-title {
+  margin: 0;
+  font-size: 17px;
+  letter-spacing: -0.015em;
+  color: #eef3fc;
+}
+
+.og-edu-detail {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.66;
+  color: var(--muted-dark);
+}
+
+.og-about-education .og-margin-note {
+  margin-top: auto;
+}
+
+@media (max-width: 980px) {
+  .og-about-bento {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .og-engineering-sheet {
+    min-height: 0;
+  }
+}

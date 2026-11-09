@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.verification/
+.sources-images/
+_sources-images/
+test-results/
+playwright-report/

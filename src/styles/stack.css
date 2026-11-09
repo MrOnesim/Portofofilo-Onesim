@@ -1,0 +1,396 @@
+/* ============================================================================
+   STACK — quatre panneaux cinéma + matrice de technologies
+   ========================================================================== */
+
+/* ---------------------------------------------------------- Accordéon cinéma */
+.og-cinema-accordion {
+  display: flex;
+  gap: clamp(10px, 1.4vw, 18px);
+  height: clamp(420px, 58vh, 560px);
+  margin-bottom: clamp(26px, 4vw, 44px);
+}
+
+.og-cinema-panel {
+  position: relative;
+  z-index: 1;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+  background: transparent;
+  min-width: 0;
+  flex: 1 1 0%;
+  transition: flex-grow 0.7s var(--ease-in-out);
+}
+
+/* Panneau ouvert : il prend la place */
+.og-cinema-panel[data-open="true"] {
+  flex-grow: 3.4;
+}
+
+.og-cinema-panel[data-open="false"] {
+  flex-grow: 1;
+}
+
+.og-cinema-bg {
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  transition: opacity var(--dur-med) ease, transform 1.2s var(--ease-out);
+  transform: scale(1.02);
+}
+
+.og-cinema-bg .og-img-el {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.4) brightness(0.6);
+}
+
+.og-cinema-panel[data-open="true"] .og-cinema-bg {
+  opacity: 0.9;
+  transform: scale(1);
+}
+
+.og-cinema-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(4, 7, 15, 0.56) 0%, rgba(4, 7, 15, 0.58) 42%, rgba(4, 7, 15, 0.94) 100%);
+}
+
+.og-cinema-panel[data-open="true"] .og-cinema-shade {
+  background: linear-gradient(180deg, rgba(4, 7, 15, 0.25) 0%, rgba(4, 7, 15, 0.45) 46%, rgba(4, 7, 15, 0.93) 100%);
+}
+
+/* ------------------------------------------------------ état réduit */
+.og-cinema-closed {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 10px 22px;
+  background: transparent;
+  border: 0;
+  color: #eef3fc;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.og-cinema-num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  color: var(--sky);
+}
+
+.og-cinema-vertical {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: clamp(1.1rem, 1.6vw, 1.5rem);
+  letter-spacing: -0.01em;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  color: #eef3fc;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+  transition: color var(--dur-fast) ease, letter-spacing var(--dur-fast) ease;
+}
+
+.og-cinema-closed:hover .og-cinema-vertical {
+  color: var(--sky-soft);
+  letter-spacing: 0.04em;
+}
+
+.og-cinema-plus {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line-strong);
+  background: rgba(4, 7, 15, 0.4);
+  color: var(--sky);
+  transition: transform var(--dur-fast) var(--ease-out), border-color var(--dur-fast) ease, background var(--dur-fast) ease;
+}
+
+.og-cinema-closed:hover .og-cinema-plus {
+  transform: rotate(90deg);
+  border-color: var(--sky);
+  background: rgba(125, 211, 252, 0.14);
+}
+
+/* ------------------------------------------------------- état ouvert */
+.og-cinema-open {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(18px, 2.2vw, 28px);
+  color: #eef3fc;
+  animation: og-fade-in 0.5s var(--ease-out) 0.12s both;
+}
+
+.og-cinema-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.og-cinema-topline .og-cinema-num {
+  color: var(--sky);
+}
+
+.og-cinema-collapse {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: rgba(4, 7, 15, 0.5);
+  color: #eaf2ff;
+  display: grid;
+  place-items: center;
+  transition: transform var(--dur-fast) var(--ease-out), border-color var(--dur-fast) ease;
+}
+
+.og-cinema-collapse:hover {
+  transform: rotate(90deg);
+  border-color: var(--sky);
+}
+
+.og-cinema-body {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 46ch;
+}
+
+.og-cinema-body h3 {
+  margin: 0;
+  font-size: clamp(1.7rem, 2.4vw, 2.4rem);
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+  color: #f4f7ff;
+}
+
+.og-cinema-body p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.65;
+  color: #c3d2ea;
+}
+
+.og-cinema-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.og-cinema-chip {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--sky-soft);
+  border: 1px solid rgba(186, 230, 253, 0.35);
+  background: rgba(7, 13, 26, 0.55);
+  backdrop-filter: blur(4px);
+  padding: 8px 13px;
+  border-radius: var(--radius-pill);
+  transition: border-color var(--dur-fast) ease, background var(--dur-fast) ease, transform var(--dur-fast) var(--ease-out);
+}
+
+.og-cinema-chip:hover {
+  border-color: var(--sky);
+  background: rgba(125, 211, 252, 0.16);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 900px) {
+  .og-cinema-accordion {
+    flex-direction: column;
+    height: auto;
+    gap: 12px;
+  }
+  .og-cinema-bg,
+  .og-cinema-shade {
+    display: none;
+  }
+  .og-cinema-panel {
+    flex: 0 0 auto;
+    min-height: 78px;
+    background: transparent;
+    border: 1px solid var(--line-soft);
+  }
+  .og-cinema-panel[data-open="true"] {
+    min-height: 380px;
+    height: 380px;
+    background: transparent;
+  }
+  .og-cinema-vertical {
+    writing-mode: horizontal-tb;
+    font-size: 1.2rem;
+    letter-spacing: 0;
+    white-space: nowrap;
+  }
+  .og-cinema-closed {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 16px;
+    padding: 18px 16px;
+  }
+  .og-cinema-closed .og-cinema-num {
+    font-size: 11px;
+  }
+  .og-cinema-closed .og-cinema-plus {
+    margin-left: auto;
+    width: 34px;
+    height: 34px;
+  }
+}
+
+/* ---------------------------------------------------------- Matrice
+   Index complet : 22 technologies, badge compteur, projets correspondants */
+.og-tech-matrix {
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-md);
+  background: transparent;
+  padding: clamp(22px, 2.6vw, 34px);
+  margin-bottom: var(--space-section);
+}
+
+.og-matrix-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--line-soft);
+  padding-bottom: 18px;
+}
+
+.og-matrix-head h3 {
+  margin: 10px 0 0;
+  font-size: clamp(1.25rem, 1.8vw, 1.7rem);
+  letter-spacing: -0.03em;
+  color: #eef3fc;
+}
+
+.og-matrix-badge {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: var(--sky);
+  border: 1px solid rgba(37, 99, 235, 0.35);
+  background: rgba(37, 99, 235, 0.08);
+  border-radius: var(--radius-pill);
+  padding: 8px 14px;
+}
+
+.og-matrix-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.og-matrix-pill {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 9px;
+  padding: 9px 15px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line-soft);
+  background: transparent;
+  color: #eef3fc;
+  transition: border-color var(--dur-fast) ease, color var(--dur-fast) ease, transform var(--dur-fast) var(--ease-out), background var(--dur-fast) ease;
+}
+
+.og-matrix-pill small {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--muted-dark);
+}
+
+.og-matrix-pill span {
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.og-matrix-pill:hover {
+  transform: translateY(-2px);
+  border-color: var(--sky);
+  color: var(--sky);
+}
+
+.og-matrix-pill.is-selected {
+  background: var(--ink-text);
+  border-color: #eef3fc;
+  color: #ffffff;
+}
+
+.og-matrix-pill.is-selected small {
+  color: var(--sky);
+}
+
+.og-matrix-matches {
+  margin-top: 20px;
+  border-top: 1px dashed var(--line-soft);
+  padding-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.og-matrix-matches-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted-dark);
+}
+
+.og-matrix-matches-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.og-matrix-match-tag {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 10px 15px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  text-decoration: none;
+  color: #eef3fc;
+  transition: border-color var(--dur-fast) ease, transform var(--dur-fast) var(--ease-out);
+}
+
+.og-matrix-match-tag:hover {
+  border-color: var(--sky);
+  transform: translateY(-2px);
+}
+
+.og-matrix-match-tag span {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--sky);
+}
+
+.og-matrix-match-tag strong {
+  font-size: 13px;
+}
+
+.og-matrix-match-tag small {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted-dark);
+}

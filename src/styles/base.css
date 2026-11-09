@@ -1,0 +1,418 @@
+/* ============================================================================
+   BASE — reset doux, conteneur, échelle typographique, boutons communs
+   ========================================================================== */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    background: var(--ink-950);
+    color-scheme: dark;
+    scroll-padding-top: 110px;
+  }
+
+  body {
+    margin: 0;
+    background: transparent;
+    color: #eef3fc;
+    font-family: var(--font-sans);
+    font-size: var(--step-body);
+    line-height: 1.6;
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Fond photographique fixe — portrait en clair-obscur, ambient texture. */
+  .og-site-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: url("/media/background-pictur.webp") center / cover no-repeat;
+    opacity: 0.55;
+    filter: contrast(1.1) brightness(0.5);
+  }
+
+  @media (max-width: 900px) {
+    .og-site-bg {
+      background-attachment: scroll;
+    }
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+    color: inherit;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  ::selection {
+    background: var(--blue-deep);
+    color: #ffffff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--sky);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+}
+
+.serif-italic {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* ---------------------------------------------------------- Conteneur éditorial */
+.og-container {
+  width: min(1340px, calc(100% - clamp(36px, 5vw, 72px) * 2));
+  margin-inline: auto;
+}
+
+@media (max-width: 720px) {
+  .og-container {
+    width: calc(100% - 36px);
+  }
+}
+
+/* ---------------------------------------------------------- Surfaces de section */
+.og-section-paper {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  color: #f4f6fb;
+}
+
+.og-section-night {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  color: #f4f6fb;
+}
+
+/* ---------------------------------------------------------- Étiquettes & annotations mono */
+.og-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: var(--step-mono);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--sky);
+}
+
+.og-eyebrow-blue {
+  color: var(--sky);
+}
+
+/* Note de marge — signature éditoriale */
+.og-margin-note {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.8;
+  letter-spacing: 0.03em;
+  color: var(--muted-dark);
+  border-left: 2px solid var(--blue);
+  padding-left: 14px;
+  margin: 0;
+}
+
+.og-section-night .og-margin-note {
+  color: var(--muted-dark);
+  border-left-color: var(--sky);
+}
+
+/* ---------------------------------------------------------- Titres display */
+.og-display-xl {
+  margin: 18px 0 0;
+  font-size: var(--display-xl);
+  line-height: 0.96;
+  letter-spacing: -0.045em;
+  font-weight: 700;
+  color: inherit;
+  white-space: normal;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.og-display-xl .og-split-accent {
+  color: var(--sky);
+}
+
+.og-section-night .og-display-xl .og-split-accent {
+  color: var(--sky);
+}
+
+.og-lead-text {
+  margin: 0;
+  max-width: 52ch;
+  font-size: var(--step-lead);
+  line-height: 1.72;
+  color: var(--muted-dark);
+}
+
+/* ---------------------------------------------------------- Révélation douce (fallback CSS) */
+.og-rise {
+  opacity: 0;
+  transform: translateY(34px);
+  transition:
+    opacity 0.9s var(--ease-out),
+    transform 0.9s var(--ease-out);
+  will-change: transform, opacity;
+  min-width: 0;
+}
+
+.og-rise-on {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------------------------------------------------------- Titres scindés mot à mot */
+.og-split-heading {
+  display: block;
+  white-space: normal;
+}
+
+.og-split-line {
+  display: block;
+  white-space: normal;
+}
+
+.og-word-mask {
+  display: inline-block;
+  overflow: hidden;
+  padding-bottom: 0.09em;
+  margin-bottom: -0.09em;
+  vertical-align: bottom;
+}
+
+.og-word-inner {
+  display: inline-block;
+  transform: translateY(112%);
+  transition: transform 0.9s var(--ease-out);
+  transition-delay: var(--word-delay, 0ms);
+  will-change: transform;
+}
+
+.og-split-heading.is-visible .og-word-inner {
+  transform: translateY(0);
+}
+
+/* ---------------------------------------------------------- Boutons */
+.og-btn-primary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 22px;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  background: var(--blue-deep);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color var(--dur-fast) ease, transform var(--dur-fast) var(--ease-out);
+}
+
+.og-btn-primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(120deg, var(--blue-ink), var(--sky));
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--dur-med) var(--ease-out);
+}
+
+.og-btn-primary:hover {
+  transform: translateY(-2px);
+}
+
+.og-btn-primary:hover::before {
+  transform: scaleX(1);
+}
+
+.og-btn-glass {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 18px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line-strong);
+  background: rgba(125, 211, 252, 0.08);
+  color: #eaf4ff;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color var(--dur-fast) ease, background var(--dur-fast) ease, transform var(--dur-fast) var(--ease-out);
+}
+
+.og-btn-glass:hover {
+  border-color: var(--sky);
+  background: rgba(125, 211, 252, 0.16);
+  transform: translateY(-2px);
+}
+
+.og-section-paper .og-btn-glass {
+  border-color: var(--sand);
+  background: transparent;
+  color: #eef3fc;
+}
+
+.og-section-paper .og-btn-glass:hover {
+  border-color: var(--sky);
+  color: var(--sky);
+}
+
+/* Lien fantôme & pilule GitHub */
+.og-ghost-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--sky);
+  background: transparent;
+  border: 0;
+  padding: 8px 4px;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(29, 78, 216, 0.35);
+  transition: border-color var(--dur-fast) ease, color var(--dur-fast) ease;
+}
+
+.og-ghost-link:hover {
+  color: var(--sky);
+  border-bottom-color: var(--sky);
+}
+
+.og-collab-showcase .og-ghost-link {
+  color: var(--sky);
+  border-bottom-color: var(--line-strong);
+}
+
+.og-github-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 15px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line-soft);
+  background: transparent;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #eef3fc;
+  text-decoration: none;
+  transition: border-color var(--dur-fast) ease, transform var(--dur-fast) var(--ease-out), background var(--dur-fast) ease;
+}
+
+.og-github-pill:hover {
+  border-color: #eef3fc;
+  transform: translateY(-2px);
+}
+
+.og-collab-showcase .og-github-pill,
+.og-modal-actions .og-github-pill {
+  color: #eaf4ff;
+  border-color: var(--line-strong);
+}
+
+/* ---------------------------------------------------------- Pastilles d'état */
+.og-status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.og-status-chip::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 10px currentColor;
+}
+
+.og-status-chip[data-status="Terminé"] {
+  color: var(--teal);
+}
+
+.collab-dark .og-status-chip[data-status="Terminé"],
+.og-collab-showcase .og-status-chip[data-status="Terminé"],
+.og-section-night .og-status-chip[data-status="Terminé"] {
+  color: var(--teal);
+}
+
+.og-status-chip[data-status="En cours"] {
+  color: var(--amber);
+}
+
+.og-section-night .og-status-chip[data-status="En cours"],
+.og-collab-showcase .og-status-chip[data-status="En cours"] {
+  color: var(--amber);
+}
+
+.og-status-chip[data-status="Concept"] {
+  color: var(--muted-dark);
+}
+
+.og-section-night .og-status-chip[data-status="Concept"],
+.og-collab-showcase .og-status-chip[data-status="Concept"] {
+  color: var(--muted-dark);
+}
+
+/* Pilules technologies */
+.og-tech-pill {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line-soft);
+  color: var(--muted-dark);
+  background: transparent;
+}
+
+.og-section-night .og-tech-pill {
+  border-color: var(--line);
+  color: var(--muted-dark);
+  background: transparent;
+}
+
+/* ---------------------------------------------------------- Images */
+.og-img {
+  display: block;
+}
+
+.og-img-el {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
