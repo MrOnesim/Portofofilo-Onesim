@@ -5,3 +5,4 @@ dist/
 _sources-images/
 test-results/
 playwright-report/
+.vercel
